@@ -20,7 +20,7 @@
   ">
     𝗕𝘂𝗶𝗹𝘁 & 𝗖𝘂𝘀𝘁𝗼𝗺𝗶𝘇𝗲𝗱 𝗯𝘆  
     <span style="color:#00ffd1; font-weight:600;">
-      𝐌𝐨𝐡𝐚𝐦𝐦𝐚𝐝 MILON
+      𝐌𝐨𝐡𝐚𝐦𝐦𝐚𝐝 RAFI ISLAM
     </span>
   </p>
 
@@ -63,14 +63,14 @@
 
   <!-- Profile Picture -->
   <div style="margin:20px 0;">
-    <img src="https://i.imgur.com/SAM4doe.jpeg" alt="MILOM" style="width:250px; height:250px; border-radius:50%; border:3px solid #00ffe1; object-fit:cover;"/>
+    <img src="https://i.imgur.com/Y20NYJl.jpeg" alt="RAFI" style="width:250px; height:250px; border-radius:50%; border:3px solid #00ffe1; object-fit:cover;"/>
   </div>
 
   <!-- About Card -->
   <div style="background:#111; padding:25px; border-radius:20px; box-shadow:0 0 15px #00bfff; max-width:800px; margin:auto;">
     <h2 style="color:#00bfff;">🌟 𝗔𝗯𝗼𝘂𝘁 𝗚𝗼𝗮𝘁 𝗕𝗼𝘁 𝗩2</h2>
     <p style="color:#d0d0d0; line-height:1.6;">
-      𝗚𝗼𝗮𝘁 𝗕𝗼𝘁 𝗩2 𝗶𝘀 𝗮 𝗽𝗼𝘄𝗲𝗿𝗳𝘂𝗹, 𝘀𝗺𝗮𝗿𝘁, 𝗮𝗻𝗱 𝗿𝗲𝗹𝗶𝗮𝗯𝗹𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗠𝗲𝘀𝘀𝗲𝗻𝗴𝗲𝗿 𝗯𝗼𝘁 𝗱𝗲𝘀𝗶𝗴𝗻𝗲𝗱 𝗳𝗼𝗿 𝗮𝘂𝘁𝗼𝗺𝗮𝘁𝗶𝗼𝗻, 𝗴𝗿𝗼𝘂𝗽 𝗺𝗮𝗻𝗮𝗴𝗲𝗺𝗲𝗻𝘁, 𝗮𝗻𝗱 𝗲𝗻𝘁𝗲𝗿𝘁𝗮𝗶𝗻𝗺𝗲𝗻𝘁. 𝗜𝘁 𝗽𝗿𝗼𝘃𝗶𝗱𝗲𝘀 𝘀𝗺𝗮𝗿𝘁 𝗿𝗲𝗽𝗹𝗶𝗲𝘀, 𝗰𝘂𝘀𝘁𝗼𝗺 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀, 𝘄𝗲𝗹𝗰𝗼𝗺𝗲/𝗹𝗲𝗮𝘃𝗲 𝘀𝘆𝘀𝘁𝗲𝗺, 𝗮𝗻𝗱 𝗺𝘂𝗹𝘁𝗶-𝗹𝗮𝗻𝗴𝘂𝗮𝗴𝗲 𝘀𝘂𝗽𝗽𝗼𝗿𝘁 — 𝗮𝗹𝗹 𝗯𝘂𝗶𝗹𝘁 𝗯𝘆 <strong>𝐌𝐨𝐡𝐚𝗺𝗺𝐚𝗱 milon</strong>.
+      𝗚𝗼𝗮𝘁 𝗕𝗼𝘁 𝗩2 𝗶𝘀 𝗮 𝗽𝗼𝘄𝗲𝗿𝗳𝘂𝗹, 𝘀𝗺𝗮𝗿𝘁, 𝗮𝗻𝗱 𝗿𝗲𝗹𝗶𝗮𝗯𝗹𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗠𝗲𝘀𝘀𝗲𝗻𝗴𝗲𝗿 𝗯𝗼𝘁 𝗱𝗲𝘀𝗶𝗴𝗻𝗲𝗱 𝗳𝗼𝗿 𝗮𝘂𝘁𝗼𝗺𝗮𝘁𝗶𝗼𝗻, 𝗴𝗿𝗼𝘂𝗽 𝗺𝗮𝗻𝗮𝗴𝗲𝗺𝗲𝗻𝘁, 𝗮𝗻𝗱 𝗲𝗻𝘁𝗲𝗿𝘁𝗮𝗶𝗻𝗺𝗲𝗻𝘁. 𝗜𝘁 𝗽𝗿𝗼𝘃𝗶𝗱𝗲𝘀 𝘀𝗺𝗮𝗿𝘁 𝗿𝗲𝗽𝗹𝗶𝗲𝘀, 𝗰𝘂𝘀𝘁𝗼𝗺 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀, 𝘄𝗲𝗹𝗰𝗼𝗺𝗲/𝗹𝗲𝗮𝘃𝗲 𝘀𝘆𝘀𝘁𝗲𝗺, 𝗮𝗻𝗱 𝗺𝘂𝗹𝘁𝗶-𝗹𝗮𝗻𝗴𝘂𝗮𝗴𝗲 𝘀𝘂𝗽𝗽𝗼𝗿𝘁 — 𝗮𝗹𝗹 𝗯𝘂𝗶𝗹𝘁 𝗯𝘆 <strong>𝐌𝐨𝐡𝐚𝗺𝗺𝐚𝗱 RAFI</strong>.
     </p>
   </div>
 
@@ -132,13 +132,13 @@
   <div style="background:#111; padding:25px; border-radius:20px; box-shadow:0 0 15px #ff4d88; max-width:800px; margin:auto;">
     <h2 style="color:#ff4d88;">💖 𝗢𝘄𝗻𝗲𝗿 𝗗𝗲𝘁𝗮𝗶𝗹𝘀</h2>
     <p style="color:#d0d0d0; line-height:1.6;">
-      👤 𝗡𝗮𝗺𝗲: 𝗠𝗼𝗵𝗮𝗺𝗺𝐚𝗱 MILON<br/>
+      👤 𝗡𝗮𝗺𝗲: 𝗠𝗼𝗵𝗮𝗺𝗺𝐚𝗱 RAFI<br/>
       🚹 𝗚𝗲𝗻𝗱𝗲𝗿: 𝗠𝗮𝗹𝗲<br/>
       ❤️ 𝗥𝗲𝗹𝗮𝘁𝗶𝗼𝗻: 𝗦𝗶𝗻𝗴𝗹𝗲<br/>
       🎂 𝗔𝗴𝗲: 18+<br/>
       🕌 𝗥𝗲𝗹𝗶𝗴𝗶𝗼𝗻: 𝗜𝘀𝗹𝗮𝗺<br/>
       🎓 𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻: 9<br/>
-      🏡 𝗔𝗱𝗱𝗿𝗲𝘀𝘀: 𝗗𝗵𝗮𝗸𝗮-narayanganj
+      🏡 𝗔𝗱𝗱𝗿𝗲𝘀𝘀: 𝗗𝗵𝗮𝗸𝗮j
     </p>
   </div>
 

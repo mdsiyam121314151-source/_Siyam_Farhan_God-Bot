@@ -7,11 +7,11 @@ const { createCanvas } = require("canvas");
 module.exports = {
   config: {
     name: "azan",
-    version: "19.0.0",
+    version: "21.0.0",
     author: "milon",
     countDown: 5,
     role: 0, 
-    description: "Fixed Precision Azan for Bangladesh",
+    description: "Auto Azan with Pre-Azan, Iftar & Sehri Mentions",
     category: "Islamic",
     guide: "{pn} [district]"
   },
@@ -21,31 +21,19 @@ module.exports = {
     try {
       let district = args[0] || "Dhaka";
       const now = moment().tz("Asia/Dhaka");
-      
-      // Islamic Foundation Bangladesh (Method 13)
       const res = await axios.get(`https://api.aladhan.com/v1/timingsByCity?city=${district}&country=Bangladesh&method=13`);
       const p = res.data.data.timings;
 
       const prayerOrder = [
-        { name: "Fajr", time: p.Fajr },
-        { name: "Dhuhr", time: p.Dhuhr },
-        { name: "Asr", time: p.Asr },
-        { name: "Maghrib", time: p.Maghrib },
-        { name: "Isha", time: p.Isha }
+        { name: "Fajr", time: p.Fajr }, { name: "Dhuhr", time: p.Dhuhr },
+        { name: "Asr", time: p.Asr }, { name: "Maghrib", time: p.Maghrib }, { name: "Isha", time: p.Isha }
       ];
 
-      let nextP = null;
-      let targetT = null;
-
+      let nextP = null; let targetT = null;
       for (let i = 0; i < prayerOrder.length; i++) {
         let pT = moment.tz(now.format("YYYY-MM-DD") + " " + prayerOrder[i].time, "YYYY-MM-DD HH:mm", "Asia/Dhaka");
-        if (pT.isAfter(now)) {
-          nextP = prayerOrder[i];
-          targetT = pT;
-          break;
-        }
+        if (pT.isAfter(now)) { nextP = prayerOrder[i]; targetT = pT; break; }
       }
-
       if (!nextP) {
         nextP = { name: "Fajr", time: p.Fajr };
         targetT = moment.tz(now.format("YYYY-MM-DD") + " " + p.Fajr, "YYYY-MM-DD HH:mm", "Asia/Dhaka").add(1, 'days');
@@ -72,66 +60,76 @@ module.exports = {
       fs.writeFileSync(imgPath, canvas.toBuffer("image/png"));
 
       api.sendMessage({ 
-        body: `🕌 ${district} Prayer Schedule\n━━━━━━━━━━━━━━━━━━\nAuto-delete in 10s`, 
+        body: `🕌 ${district} নামাজের সময়সূচী\n(১০ সেকেন্ড পর ডিলিট হবে)`, 
         attachment: fs.createReadStream(imgPath) 
       }, threadID, (err, info) => {
         if(fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
         setTimeout(() => { api.unsendMessage(info.messageID); }, 10000); 
       }, messageID);
-    } catch (e) { api.sendMessage("❌ Error loading prayer times!", threadID); }
+    } catch (e) { api.sendMessage("❌ এরর!", threadID); }
   },
 
   onLoad: async function ({ api }) {
+    const azanVidUrl = "https://files.catbox.moe/cvv4ni.mp4";
+
     if (!global.azanInterval) {
       global.azanInterval = setInterval(async () => {
         const now = moment().tz("Asia/Dhaka");
         const currentTime = now.format("HH:mm");
-        const alertTime = now.clone().add(1, 'minutes').format("HH:mm");
+        const nextMin = now.clone().add(1, 'minutes').format("HH:mm");
 
         try {
           const res = await axios.get(`https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=13`);
           const p = res.data.data.timings;
-          
-          // সময়ের নিখুঁত তালিকা
-          const prayerTimes = {
-            "Fajr": p.Fajr,
-            "Dhuhr": p.Dhuhr,
-            "Asr": p.Asr,
-            "Maghrib": p.Maghrib,
-            "Isha": p.Isha
-          };
+          const prayerList = { "Fajr": p.Fajr, "Dhuhr": p.Dhuhr, "Asr": p.Asr, "Maghrib": p.Maghrib, "Isha": p.Isha };
 
+          const sehriAlertTime = moment(p.Fajr, "HH:mm").subtract(10, 'minutes').format("HH:mm");
           const allThreads = await api.getThreadList(100, null, ["INBOX"]);
-
+          
           for (const thread of allThreads) {
-            if (!thread.isGroup) continue;
             const threadID = thread.threadID;
+            if (!thread.isGroup) continue;
 
-            for (const [name, time] of Object.entries(prayerTimes)) {
-              // ১ মিনিট আগে অ্যালার্ট
-              if (time === alertTime) {
+            for (const [name, time] of Object.entries(prayerList)) {
+              
+              // ১. আজান শুরু হওয়ার ১ মিনিট আগে মেনশন
+              if (time === nextMin) {
                 api.sendMessage({ 
-                  body: `⚠️ @everyone Get Ready! ${name} Azan in 1 minute.`, 
+                  body: `⚠️ @everyone দৃষ্টি আকর্ষণ! আর মাত্র ১ মিনিট পর ${name}-এর আজান শুরু হবে। দয়া করে নামাজের প্রস্তুতি নিন। ✨`, 
                   mentions: [{ tag: "@everyone", id: threadID }] 
                 }, threadID);
               }
 
-              // সঠিক সময়ে আজান ভিডিও
+              // ২. আজান শুরু হওয়ার সময় ভিডিও
               if (time === currentTime) {
-                const vidUrl = "https://files.catbox.moe/cvv4ni.mp4";
-                const vidPath = path.join(__dirname, "cache", `azan_v_${threadID}.mp4`);
-                const { data } = await axios.get(vidUrl, { responseType: "arraybuffer" });
+                const vidPath = path.join(__dirname, "cache", `auto_vid_${threadID}.mp4`);
+                const { data } = await axios.get(azanVidUrl, { responseType: "arraybuffer" });
                 fs.writeFileSync(vidPath, Buffer.from(data));
-
                 api.sendMessage({ 
-                  body: `🕌 It's time for ${name} prayer.\n━━━━━━━━━━━━━━━━━━\nPray for everyone. ✨`, 
+                  body: `🕌 আজানের সময় হয়েছে (${name})\nনামাজ পড়ুন, জীবনকে সুন্দর করুন।`, 
                   attachment: fs.createReadStream(vidPath) 
                 }, threadID, () => { if(fs.existsSync(vidPath)) fs.unlinkSync(vidPath); });
               }
             }
+
+            // ৩. ইফতারের সময় মেনশন (মাগরিবের সময়)
+            if (p.Maghrib === currentTime) {
+               api.sendMessage({ 
+                 body: `🌙 আলহামদুলিল্লাহ, ইফতারের সময় হয়েছে। @everyone সবাই ইফতার করে নিন এবং দোয়া করুন। ✨`, 
+                 mentions: [{ tag: "@everyone", id: threadID }] 
+               }, threadID);
+            }
+
+            // ৪. সেহরির শেষ সময়ের অ্যালার্ট (১০ মিনিট আগে)
+            if (sehriAlertTime === currentTime) {
+               api.sendMessage({ 
+                 body: `🌙 @everyone সতর্কবার্তা! সেহরির শেষ সময়ের আর মাত্র ১০ মিনিট বাকি। জলদি সেহরি শেষ করুন। ✨`, 
+                 mentions: [{ tag: "@everyone", id: threadID }] 
+               }, threadID);
+            }
           }
-        } catch (err) { console.error(err); }
-      }, 60000); // প্রতি মিনিটে চেক করবে
+        } catch (err) { }
+      }, 60000);
     }
   }
 };

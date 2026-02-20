@@ -1,125 +1,93 @@
-const { createCanvas, loadImage } = require("canvas");
-const fs = require("fs");
-const path = require("path");
+const os = require('os');
+const moment = require('moment-timezone');
+const axios = require('axios');
+const mongoose = require('mongoose');
 
 module.exports = {
   config: {
     name: "uptime",
-    aliases: ["up", "upt"],
-    version: "2.3",
-    author: "Washiq",
+    version: "8.0.0",
     role: 0,
-    shortDescription: { en: "Check bot uptime with ping and image" },
-    longDescription: { en: "Display how long the bot is running along with ping time and a custom image" },
+    author: "xalman",
+    description: "Premium Uptime for Goat Bot V2",
     category: "system",
-    guide: { en: "{pn} → check bot uptime (prefix for all, no-prefix only owner)" }
+    guide: "{pn}",
+    countDown: 5
   },
 
-  onStart() {
-    console.log("✅ Uptime command loaded.");
-  },
+  onStart: async function ({ api, event }) {
+    const { threadID, messageID, timestamp } = event;
 
-  onChat: async function ({ event, message, commandName }) {
-    const prefix = global.GoatBot?.config?.prefix || "/";
-    const rawBody = (event.body || "").trim();
-    if (!rawBody) return;
+    const sendLoading = await api.sendMessage("⏳ 𝗟𝗼𝗮𝗱𝗶𝗻𝗴 𝗦𝘆𝘀𝘁𝗲𝗺: 𝟬%", threadID);
 
-    // ✅ ONLY YOU can use without prefix
-    const OWNER_ID = "61586540721576";
-    const isOwner = String(event.senderID) === OWNER_ID;
+    const loadingSteps = ["𝟮𝟬%", "𝟰𝟬%", "𝟲𝟬%", "𝟴𝟬%", "𝟭𝟬𝟬%"];
+    
+    for (const step of loadingSteps) {
+      await new Promise(resolve => setTimeout(resolve, 500)); // Half second delay per step
+      await api.editMessage(`⏳ 𝗟𝗼𝗮𝗱𝗶𝗻𝗴 𝗦𝘆𝘀𝘁𝗲𝗺: ${step}`, sendLoading.messageID);
+    }
 
-    const body = rawBody.toLowerCase();
-    const names = [commandName, ...(this.config.aliases || [])].map(n => String(n).toLowerCase());
+    const uptime = process.uptime();
+    const days = Math.floor(uptime / (3600 * 24));
+    const hours = Math.floor((uptime % (3600 * 24)) / 3600);
+    const mins = Math.floor((uptime % 3600) / 60);
+    const secs = Math.floor(uptime % 60);
 
-    const isWithPrefix = names.some(n => body === (prefix + n) || body.startsWith(prefix + n + " "));
-    const isWithoutPrefix = names.some(n => body === n || body.startsWith(n + " "));
+    const usedRam = (process.memoryUsage().rss / 1024 / 1024).toFixed(1);
+    const totalRam = (os.totalmem() / 1024 / 1024 / 1024).toFixed(1);
+    const dbStatus = mongoose.connection.readyState === 1 ? "Connected 🟢" : "Disconnected 🔴";
+    
+    const timeNow = moment.tz("Asia/Dhaka").format("hh:mm:ss A");
+    const dateNow = moment.tz("Asia/Dhaka").format("DD/MM/YYYY");
 
-    // block if not a trigger
-    if (!isWithPrefix && !isWithoutPrefix) return;
+    const gifLinks = [
+      "https://files.catbox.moe/20q0dn.gif",
+      "https://files.catbox.moe/20q0dn.gif"
+    ];
+    const randomGif = gifLinks[Math.floor(Math.random() * gifLinks.length)];
 
-    // 🔒 block non-owner using without prefix
-    if (isWithoutPrefix && !isOwner) return;
+    const msg = `
+◢◤━━━━━━━━━━━━━━━━◥◣
+   𝗚𝗢𝗔𝗧 𝗕𝗢𝗧 𝗩𝟮 𝗢𝗡𝗟𝗜𝗡𝗘
+◥◣━━━━━━━━━━━━━━━━◢◤
 
-    const imagePath = path.join(__dirname, "uptime_image.png");
+      『 𝗦𝗬𝗦𝗧𝗘𝗠 𝗔𝗡𝗔𝗟𝗬𝗧𝗜𝗖𝗦 』
 
-    const EMOJI = {
-      bot: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f916.png",
-      time: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/23f3.png",
-      bolt: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/26a1.png",
-      crown: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f451.png"
-    };
+💠 𝗨𝗽𝘁𝗶𝗺𝗲 𝗦𝘁𝗮𝘁𝘂𝘀:
+  »→ ⏲️ 𝗧𝗶𝗺𝗲: ${days}𝗱 ${hours}𝗵 ${mins}𝗺 ${secs}𝘀
+  »→ 🛰️ 𝗟𝗮𝘁𝗲𝗻𝗰𝘆: ${Date.now() - event.timestamp}𝗺𝘀
+  »→ 🌐 𝗦𝘁𝗮𝘁𝘂𝘀: 𝗔𝗰𝘁𝗶𝘃𝗲 ✔️
+
+🍃 𝗗𝗮𝘁𝗮𝗯𝗮𝘀𝗲 (𝗠𝗼𝗻𝗴𝗼𝗼𝘀𝗲):
+  »~ 🔌 𝗦𝘁𝗮𝘁𝘂𝘀: ${dbStatus}
+  » 📁 𝗗𝗕 𝗡𝗮𝗺𝗲: TBTNX210
+  » 🧬 𝗗𝗿𝗶𝘃𝗲𝗿: v${mongoose.version}
+
+⚡ 𝗥𝗲𝘀𝗼𝘂𝗿𝗰𝗲𝘀:
+  » 💾 𝗥𝗔𝗠: ${usedRam}𝗠𝗕 / ${totalRam}𝗚𝗕
+  » 🔋 𝗟𝗼𝗮𝗱: [▓▓▓▓▓▓▓░░░]
+  » ⚙️ 𝗡𝗼𝗱𝗲: ${process.version}
+
+🕒 𝗧𝗶𝗺𝗲𝗹𝗶𝗻𝗲:
+  » 📅 𝗗𝗮𝘁𝗲: ${dateNow}
+  » ⏰ 𝗧𝗶𝗺𝗲: ${timeNow}
+
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+   👤 𝗢𝘄𝗻𝗲𝗿: -Rꫝғɪɪ 6x9
+   🛡️ 𝗦𝘁𝗮𝘁𝘂𝘀: 𝗦𝗲𝗰𝘂𝗿𝗲𝗱 & 𝗢𝗻𝗹𝗶𝗻𝗲
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`.trim();
 
     try {
-      const pingMsg = await message.reply("⚡ Checking ping...");
-      const start = Date.now();
-      await new Promise(res => setTimeout(res, 100));
-      const ping = Date.now() - start;
+      const stream = (await axios.get(randomGif, { responseType: 'stream' })).data;
 
-      const uptime = Math.floor(process.uptime());
-      const days = Math.floor(uptime / (3600 * 24));
-      const hours = Math.floor((uptime % (3600 * 24)) / 3600);
-      const minutes = Math.floor((uptime % 3600) / 60);
-      const seconds = uptime % 60;
-      const upTimeStr = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-      const canvas = createCanvas(1000, 500);
-      const ctx = canvas.getContext("2d");
-
-      const bgUrl = "https://i.imgur.com/exTf6x3.jpeg";
-      const background = await loadImage(bgUrl);
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-      const [icoBot, icoTime, icoBolt, icoCrown] = await Promise.all([
-        loadImage(EMOJI.bot),
-        loadImage(EMOJI.time),
-        loadImage(EMOJI.bolt),
-        loadImage(EMOJI.crown)
-      ]);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 45px Arial";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.shadowColor = "rgba(0,0,0,0.7)";
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      ctx.shadowBlur = 4;
-
-      const drawRow = (iconImg, text, x, y) => {
-        const size = 52;
-        ctx.drawImage(iconImg, x, y - size / 2, size, size);
-        ctx.fillText(text, x + size + 16, y);
-      };
-
-      drawRow(icoBot, "BOT UPTIME", 60, 100);
-      drawRow(icoTime, upTimeStr, 60, 200);
-      drawRow(icoBolt, `Ping: ${ping}ms`, 60, 280);
-      drawRow(icoCrown, "Owner: RAFI✓", 60, 360);
-
-      fs.writeFileSync(imagePath, canvas.toBuffer("image/png"));
-
-      try { await message.unsend(pingMsg.messageID); } catch (_) {}
-
-      await message.reply({
-        body:
-`━━━━━━━━━━━━━━
-𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐔𝐒 ✅
-╭─╼━━━━━━━━╾─╮
-│ 💤 Uptime : ${upTimeStr}
-│ ⚡ Ping   : ${ping}ms
-│ 👑 Owner  : -Rꫝғɪɪ 6x9
-╰─━━━━━━━━━╾─╯
-━━━━━━━━━━━━━━`,
-        attachment: fs.createReadStream(imagePath)
-      });
-
-    } catch (err) {
-      console.error("❌ Error in uptime command:", err);
-      await message.reply("⚠️ Failed to generate uptime.");
-    } finally {
-      if (fs.existsSync(imagePath)) {
-        try { fs.unlinkSync(imagePath); } catch (_) {}
-      }
+      await api.unsendMessage(sendLoading.messageID);
+      
+      return api.sendMessage({
+        body: msg,
+        attachment: stream
+      }, threadID, messageID);
+    } catch (error) {
+      return api.editMessage(msg, sendLoading.messageID);
     }
   }
 };

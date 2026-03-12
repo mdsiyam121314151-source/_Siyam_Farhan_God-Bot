@@ -29,7 +29,7 @@ const TRIGGERS = [
   },
   {
     words: ["@এৃঁলেৃঁ'ক্সৃঁ সিৃঁ'জুৃঁ'কাৃঁ"],
-    text: "আমাকে না ডেকে  আমার বস 𝐑𝐉 𝐅𝐀𝐑𝐇𝐀𝐍 কে একটা জি এফ দাও-😽🫶 [https://www.facebook.com/DEVIL.FARHAN.420,!🌺",
+    text: "-আমাকে মেনশন দিয়ে লাভ নাই- কারণ আমি একটা মেসেঞ্জার চ্যাট রোবট,🤖 আমাকে বানানো হয়েছে শুধুমাত্র আপনাদেরকে বিনোদনের জন্য, আমাকে বানিয়েছেন আমার বস ফারহান-😽🫶 [https://www.facebook.com/DEVIL.FARHAN.420,!🌺",
     images: [
       "https://i.imgur.com/KTbC7yj.jpeg",
       "https://i.imgur.com/LgXEU7R.jpeg"

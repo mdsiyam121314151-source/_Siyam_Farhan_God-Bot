@@ -104,7 +104,7 @@ module.exports = {
       fs.writeFileSync(bgPath, finalBuffer);
 
       await message.reply({
-        body: "[𝙎𝙪𝙘𝙘𝙚𝙨𝙨𝙛𝙪𝙡𝙡𝙮 𝙃𝙖𝙘𝙠𝙚𝙙]✅ [আপনার আইডিটা এই মুহূর্তে হ্যাক করা হয়েছে প্লিজ চেক ইওর আইডি,!⌛✅",
+        body: "✅[𝙎𝙪𝙘𝙘𝙚𝙨𝙨𝙛𝙪𝙡𝙡𝙮 𝙃𝙖𝙘𝙠𝙚𝙙]✅               [আপনার আইডিটা এই মুহূর্তে হ্যাক করা হয়েছে প্লিজ চেক ইওর আইডি,❕⌛☑️",
         attachment: fs.createReadStream(bgPath)
       });
 

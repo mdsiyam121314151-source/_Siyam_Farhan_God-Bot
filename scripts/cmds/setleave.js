@@ -130,4 +130,44 @@ module.exports = {
 			}
 			case "on":
 			case "off": {
-				settings.sendLeaveMessage = args[0] == "on"
+				settings.sendLeaveMessage = args[0] == "on";
+				await threadsData.set(threadID, { settings });
+				message.reply(getLang(args[0] == "on" ? "turnedOn" : "turnedOff"));
+				break;
+			}
+			default:
+				message.SyntaxError();
+				break;
+		}
+	},
+
+	onReply: async function ({ event, Reply, message, threadsData, getLang }) {
+		const { threadID, senderID } = event;
+		if (senderID != Reply.author)
+			return;
+
+		if (event.attachments.length == 0 && (!event.messageReply || event.messageReply.attachments.length == 0))
+			return message.reply(getLang("missingFile"));
+		saveChanges(message, event, threadID, senderID, threadsData, getLang);
+	}
+};
+
+async function saveChanges(message, event, threadID, senderID, threadsData, getLang) {
+	const { data } = await threadsData.get(threadID);
+	const attachments = [...event.attachments, ...(event.messageReply?.attachments || [])].filter(item => ["photo", 'png', "animated_image", "video", "audio"].includes(item.type));
+	if (!data.leaveAttachment)
+		data.leaveAttachment = [];
+
+	await Promise.all(attachments.map(async attachment => {
+		const { url } = attachment;
+		const ext = getExtFromUrl(url);
+		const fileName = `${getTime()}.${ext}`;
+		const infoFile = await drive.uploadFile(`setleave_${threadID}_${senderID}_${fileName}`, await getStreamFromURL(url));
+		data.leaveAttachment.push(infoFile.id);
+	}));
+
+	await threadsData.set(threadID, {
+		data
+	});
+	message.reply(getLang("addedFile", attachments.length));
+			}

@@ -85,7 +85,7 @@ module.exports = {
       fs.writeFileSync(outPath, buffer);
 
       await message.reply({
-        body: "উফ বেবি আস্তে চুদো।👅\n\nনাম: ${userName} 🎭\n ব্যথা পাবে তো। 🥵🤭",
+        body: "উফ বেবি আস্তে চুদো।👅 ব্যথা পাবে তো। 🥵🤭",
         attachment: fs.createReadStream(outPath),
       });
 

@@ -61,23 +61,23 @@ module.exports = {
 
     
     const owner = "𓆩𝆠፝𝆠꯭፝֟𝆠፝𝐅𝐀𝐑𝐇𝐀𝐍-𝐊𝐇𝐀𝐍𝆠꯭፝֟𝆠꯭፝֟𓆪"; 
-    const fb = "@DEVIL.FARHAN.420";
+    const fb = "https://m.me/DEVIL.FARHAN.420";
 
     
     const formSend = {
       body:
-`╭━━━〔 𝗡𝗢𝗧𝗜𝗙𝗜𝗖𝗔𝗧𝗜𝗢𝗡  〕━━━╮
+`╭━━〔 𝗡𝗢𝗧𝗜𝗙𝗜𝗖𝗔𝗧𝗜𝗢𝗡 〕━━╮
 │ 𝐎𝐖𝐍𝐄𝐑:= ${owner}
 │𝐌𝐄𝐒𝐒𝐄𝐍𝐆𝐄𝐑:= ${fb}
-╰━━━━━━━━━━━━━━━━━━━━╯
+╰━━━━━━━━━━━━━━━━━━╯
 
 🕒 Time: ${timeString} - ${dateString}
 
-────────────────────────
+────────────────────
 
 ${msgText || "(media only)"}
 
-━━━━━━━━━━━━━━━━━━━━━━╯`,
+╰━━━━━━━━━━━━━━━━━━━╯`,
       attachment: streamAttachments
     };
 

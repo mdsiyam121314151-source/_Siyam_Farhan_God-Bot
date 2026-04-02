@@ -48,7 +48,7 @@
 
 <img align="center" alt="line" src="https://github.com/DalpatRathore/dalpatrathore/blob/main/assets/images/line-2.svg">
 
-- ➪ 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 :- [─꯭─⃝‌‌Dɜ⃨⃔v‌ɪ‌l F⃪‌‌ʌ𝆭‌⃪‌ʀ‌ʜ‌ʌ𝆭‌⃪‌ɳ⃪ ▁▁▁╱╱😈⚔️👿](https://www.facebook.com/DEVIL.FARHAN.420)
+- ➪ 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 :- [─꯭─⃝‌‌Dɜ⃨⃔v‌ɪ‌l F⃪‌‌ʌ𝆭‌⃪‌ʀ‌ʜ‌ʌ𝆭‌⃪‌ɳ⃪ ▁▁▁╱╱😈⚔️👿](https://www.facebook.com/MR.FARHAN.420)
 
 <img align="center" alt="line" src="https://github.com/DalpatRathore/dalpatrathore/blob/main/assets/images/line-2.svg">
 

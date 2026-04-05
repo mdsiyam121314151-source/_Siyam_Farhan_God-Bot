@@ -1,77 +1,66 @@
-const a = require("axios");
-const b = require("fs");
-const c = require("path");
-const d = require("yt-search");
+const A = require("axios");
+const B = require("fs-extra");
+const C = require("path");
+const S = require("yt-search");
+
+const p = C.join(__dirname, "cache", `${Date.now()}.mp3`);
 
 const nix = "https://raw.githubusercontent.com/aryannix/stuffs/master/raw/apis.json";
 
 module.exports = {
   config: {
     name: "sing",
-    aliases: ["music", "song"],
+    aliases: ["song", "music", "play"],
     version: "0.0.1",
-    author: "ArYAN",
-    countDown: 5,
+    author: "Farhan-Khan",
+    countDown: 10,
     role: 0,
-    shortDescription: "Sing tomake chai",
-    longDescription: "Search and download music from YouTube",
-    category: "MUSIC",
-    guide: "/music <song name or YouTube URL>"
+    category: "media"
   },
 
-  onStart: async function ({ api: e, event: f, args: g }) {
-    if (!g.length) return e.sendMessage("❌ Provide a song name or YouTube URL.", f.threadID, f.messageID);
+  onStart: async function ({ api, event, args }) {
+    const { threadID: t, messageID: m } = event;
+    const q = args.join(" ");
+    if (!q) return api.sendMessage("❌ Please provide a song name or link.", t, m);
 
-    let baseApi;
-    const i = await e.sendMessage("🎵 Please wait...", f.threadID, null, f.messageID);
-    
-    try {
-      const configRes = await a.get(nix);
-      baseApi = configRes.data && configRes.data.api;
-      if (!baseApi) throw new Error("Configuration Error: Missing API in GitHub JSON.");
-    } catch (error) {
-      e.unsendMessage(i.messageID);
-      return e.sendMessage("❌ Failed to fetch API configuration from GitHub.", f.threadID, f.messageID);
-    }
-
-    let h = g.join(" ");
+    api.setMessageReaction("⏳", m, () => {}, true);
 
     try {
-      let j;
-      if (h.startsWith("http")) {
-        j = h;
-      } else {
-        const k = await d(h);
-        if (!k || !k.videos.length) throw new Error("No results found.");
-        j = k.videos[0].url;
+      const D = await A.get(nix);
+      const E = D.data.api;
+      
+      let u = q;
+      if (!q.startsWith("http")) {
+        const r = await S(q);
+        const v = r.videos[0];
+        if (!v) throw new Error("Error ytdl issue 🧘");
+        u = v.url;
       }
 
-      const l = `${baseApi}/play?url=${encodeURIComponent(j)}`;
-      const m = await a.get(l);
-      const n = m.data;
+      const F = await A.get(`${E}/ytdl`, {
+        params: { url: u, type: "audio" }
+      });
 
-      if (!n.status || !n.downloadUrl) throw new Error("API failed to return download URL.");
+      if (!F.data.status || !F.data.downloadUrl) throw new Error("API Error");
 
-      const o = `${n.title}.mp3`.replace(/[\\/:"*?<>|]/g, "");
-      const p = c.join(__dirname, o);
+      const DL = F.data.downloadUrl;
+      const title = F.data.title || "Song";
 
-      const q = await a.get(n.downloadUrl, { responseType: "arraybuffer" });
-      b.writeFileSync(p, q.data);
+      const res = await A.get(DL, { responseType: "arraybuffer" });
+      await B.outputFile(p, Buffer.from(res.data));
 
-      await e.sendMessage(
-        { attachment: b.createReadStream(p), body: `🎵 𝗠𝗨𝗦𝗜𝗖\n━━━━━━━━━━━━━━━\n\n${n.title}` },
-        f.threadID,
-        () => {
-          b.unlinkSync(p);
-          e.unsendMessage(i.messageID);
-        },
-        f.messageID
-      );
+      api.setMessageReaction("✅", m, () => {}, true);
 
-    } catch (r) {
-      console.error(r);
-      e.sendMessage(`❌ Failed to download song: ${r.message}`, f.threadID, f.messageID);
-      e.unsendMessage(i.messageID);
+      return api.sendMessage({
+        body: `🎵 Title: ${title}`,
+        attachment: B.createReadStream(p)
+      }, t, () => {
+        if (B.existsSync(p)) B.unlinkSync(p);
+      }, m);
+
+    } catch (e) {
+      api.setMessageReaction("❌", m, () => {}, true);
+      return api.sendMessage(`❌ Error: ${e.message}`, t, m);
     }
   }
 };

@@ -5,7 +5,7 @@ module.exports = {
     name: "ffinfo",
     aliases: ["freefireinfo", "ffstats"],
     version: "2.1.0",
-    author: "Dipto ✚ Edit by Mᴏʜᴀᴍᴍᴀᴅ Aᴋᴀsʜ",
+    author: "FARHAN-KHAN",
     role: 0,
     premium: false,
     description: "Show complete Free Fire player info with styled output",

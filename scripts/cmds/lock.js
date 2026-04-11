@@ -1,5 +1,5 @@
 const lockedThreads = {};
-const pageID = "100067158230673"; // তোমার পেজ আইডি
+const pageID = "61573366160918"; // তোমার পেজ আইডি
 
 module.exports = {
   config: {

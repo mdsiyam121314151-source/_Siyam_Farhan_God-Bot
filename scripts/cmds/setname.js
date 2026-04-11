@@ -13,7 +13,7 @@ module.exports = {
 	config: {
 		name: "setname",
 		version: "1.5",
-		author: "NTKhang",
+		author: "MR_FARHAN",
 		countDown: 5,
 		role: 0,
 		description: {

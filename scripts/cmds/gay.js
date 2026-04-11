@@ -9,7 +9,7 @@ module.exports = {
         name: "gay",
         aliases: ["gay"],
         version: "1.2",
-        author: "Rômeo",
+        author: "FARHAN-KHAN",
         countDown: 5,
         role: 0,
         shortDescription: "rainbowify someone's avatar",

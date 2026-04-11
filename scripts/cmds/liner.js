@@ -41,7 +41,7 @@ module.exports = {
   config: {
     name: "liner",
     version: "1.0",
-    author: "nexo_here",
+    author: "FARHAN-KHAN",
     role: 0,
     longDescription: "Liner AI assistant.",
     category: "ai",

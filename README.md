@@ -30,7 +30,7 @@
 
 ---
 
-## ⚡ 𝐆𝐎𝐀𝐓-𝐁𝐎𝐓-𝐕𝟐 ⚡
+##        ⚡ 𝐆𝐎𝐀𝐓-𝐁𝐎𝐓-𝐕𝟐 ⚡
 
   <div align="center" style="max-width:820px; margin:auto; padding:20px; background:#111; border-radius:20px; box-shadow:0 0 15px #0099ff;">
     <h2 style="color:#00c4ff;">📹 𝗦𝗲𝘁𝘂𝗽 𝗧𝘂𝘁𝗼𝗿𝗶𝗮𝗹</h2>

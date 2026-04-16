@@ -37,7 +37,8 @@
     <p style="color:#d0d0d0;">𝐂𝐥𝐢𝐜𝐤 ➜ 𝐭𝐡𝐞 𝐭𝐡𝐮𝐦𝐛𝐧𝐚𝐢𝐥 𝐛𝐞𝐥𝐨𝐰 𝐭𝐨 𝐰𝐚𝐭𝐜𝐡 𝐭𝐡𝐞 𝐜𝐨𝐦𝐩𝐥𝐞𝐭𝐞 𝐬𝐞𝐭𝐮𝐩 𝐭𝐮𝐭𝐨𝐫𝐢𝐚𝐥 𝐨𝐧 𝐘𝐨𝐮𝐓𝐮𝐛𝐞:↓</p>
     <a href="https://youtu.be/gPf_BFhQz_w" target="_blank">
       <img src="https://img.youtube.com/vi/gPf_BFhQz_w/hqdefault.jpg" 
-           alt="Goat Bot V2 Setup Tutorial"
+           alt="Goat Bot V2 Setup Tutorial">
+</p>
 
 ---
 

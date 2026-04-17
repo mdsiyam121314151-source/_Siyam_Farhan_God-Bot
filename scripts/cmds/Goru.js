@@ -138,7 +138,7 @@ module.exports = {
       const tagName = userInfo[targetID]?.name || "Someone";
 
       await message.reply({
-        body: `🤣😹\n@${tagName} একদম আসল গরু হয়েছে বিদেশী গরু! 🐮✨`,
+        body: `🤣😹\n@${tagName} একদম আসল গরু হয়েছে বিদেশী গরু! 🐮✨ আরো কর বস সিয়াম এর সাথে বিয়াদবি😴`,
         mentions: [{ tag: tagName, id: targetID }],
         attachment: fs.createReadStream(outputPath),
       });

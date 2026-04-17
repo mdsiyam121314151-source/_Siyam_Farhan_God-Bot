@@ -6,7 +6,7 @@ module.exports = {
 		name: "admin",
 		alias: ["operator"],
 		version: "2.2",
-		author: "MR_FARHAN",
+		author: "亗 SIYAM HASAN 亗",
 		countDown: 5,
 		role: 0,
 		shortDescription: { en: "Operator system" },
@@ -33,13 +33,12 @@ module.exports = {
 
 		const senderID = event.senderID;
 
-		// ✅ Owners (যারা add/remove করতে পারবে)
+		// ✅ Owners
 		const OWNER = [
-			"61573366160918",
+			"61568411310748",
 			""
 		];
 
-		// ✅ Check: sender owner কিনা
 		const isOwner = OWNER.includes(senderID);
 
 		switch (args[0]) {
@@ -47,7 +46,7 @@ module.exports = {
 			case "add":
 			case "-a": {
 				if (!isOwner)
-					return message.reply("❌ | Only my boss farhan can add operator.");
+					return message.reply("❌ | Only SIYAM can add operator.");
 
 				let uids = [];
 				if (event.type === "message_reply") {
@@ -80,24 +79,21 @@ module.exports = {
 				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
 				return message.reply(
-					(notAdminIds.length > 0 ? getLang(
-						"added",
-						notAdminIds.length,
-						getNames.filter(n => notAdminIds.includes(n.uid)).map(i => `• ${i.name} (${i.uid})`).join("\n")
-					) : "")
-					+
-					(adminIds.length > 0 ? getLang(
-						"alreadyAdmin",
-						adminIds.length,
-						adminIds.map(uid => `• ${uid}`).join("\n")
-					) : "")
+`╭━━━〔 ✅ SIYAM SYSTEM 〕━━━╮
+${notAdminIds.length > 0 
+? `┃ ✔ Added:\n${getNames.filter(n => notAdminIds.includes(n.uid)).map(i => `┃ • ${i.name} (${i.uid})`).join("\n")}` 
+: ""}
+${adminIds.length > 0 
+? `┃ ⚠ Already Operator:\n${adminIds.map(uid => `┃ • ${uid}`).join("\n")}` 
+: ""}
+╰━━━━━━━━━━━━━━━━━━━━╯`
 				);
 			}
 
 			case "remove":
 			case "-r": {
 				if (!isOwner)
-					return message.reply("❌ | Only my boss farhan can remove operator.");
+					return message.reply("❌ | Only SIYAM can remove operator.");
 
 				let uids = [];
 
@@ -132,17 +128,14 @@ module.exports = {
 				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
 				return message.reply(
-					(adminIds.length > 0 ? getLang(
-						"removed",
-						adminIds.length,
-						getNames.map(i => `• ${i.name} (${i.uid})`).join("\n")
-					) : "")
-					+
-					(notAdminIds.length > 0 ? getLang(
-						"notAdmin",
-						notAdminIds.length,
-						notAdminIds.map(uid => `• ${uid}`).join("\n")
-					) : "")
+`╭━━━〔 ❌ SIYAM SYSTEM 〕━━━╮
+${adminIds.length > 0 
+? `┃ ✔ Removed:\n${getNames.map(i => `┃ • ${i.name} (${i.uid})`).join("\n")}` 
+: ""}
+${notAdminIds.length > 0 
+? `┃ ⚠ Not Operator:\n${notAdminIds.map(uid => `┃ • ${uid}`).join("\n")}` 
+: ""}
+╰━━━━━━━━━━━━━━━━━━━━╯`
 				);
 			}
 
@@ -153,17 +146,17 @@ module.exports = {
 				);
 
 				const ownerBox =
-`╭━━━━━━〔 𝙾𝚆𝙽𝙴𝚁 〕━━━━━━╮
-│ 𝙽𝙰𝙼𝙴 :  𝙼𝚁_𝙵𝙰𝚁𝙷𝙰𝙽
-│ 𝚄𝙸𝙳 : ${OWNER.join(", ")}
-╰━━━━━━━━━━━━━━━━━━╯`;
+`╔══════〔 👑 SIYAM OWNER 〕══════╗
+┃ 🧑 NAME : SIYAM
+┃ 🆔 UID  : ${OWNER.join(", ")}
+╚══════════════════════════════╝`;
 
 				const operatorsBox =
-`╭━━━〔 𝙾𝙿𝙴𝚁𝙰𝚃𝙾𝚁 𝙻𝙸𝚂𝚃 〕━━━╮
+`╔════〔 ⚙️ SIYAM OPERATORS 〕════╗
 ${getNames.length > 0
-	? getNames.map(i => `│ • ${i.name} (${i.uid})`).join("\n")
-	: "│ No Operators Found"}
-╰━━━━━━━━━━━━━━━━━━╯`;
+	? getNames.map(i => `┃ • ${i.name} (${i.uid})`).join("\n")
+	: "┃ No Operators Found"}
+╚══════════════════════════════╝`;
 
 				return message.reply(ownerBox + "\n\n" + operatorsBox);
 			}

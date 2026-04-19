@@ -39,7 +39,7 @@ module.exports = {
 🚻 Gender: ${gender}
 🔗 Profile: https://facebook.com/${uid}
 
-─꯭─⃝͎̽𓆩𝐅𝐀𝐑𝐇𝐀𝐍 𝐀𝐑 𝐁𝐎𝐓‣᭄𓆪`
+─꯭─⃝͎̽𓆩 𝐒𝐈𝐘𝐀𝐌 𝐀𝐑 𝐁𝐎𝐓 ‣ 𝐋𝐄𝐃 𝐌𝐎𝐃𝐄 𓆪`
       );
 
     } catch (err) {

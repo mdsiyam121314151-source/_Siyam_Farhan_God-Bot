@@ -6,7 +6,7 @@ module.exports = {
 config: {
 name: "config",
 version: "1.1.0",
-author: "ryuko | fixed by Farhan",
+author: "亗𝐃𝐒 乂𝐒𝐈𝐘𝐀𝐌亗 | 亗 SIYAM HASAN 亗",
 countDown: 5,
 role: 3, // Operator Only
 description: "Bot account configuration and management",
@@ -15,15 +15,14 @@ guide: "{pn}"
 },
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 🔐 [ FILE CREATOR INFORMATION-SIZUKA BOT ]
- * 👤 OWNER    : FARHAN KHAN
- * 🆔 UID      : 61573366160918
- * 🔗 FACEBOOK : https://www.facebook.com/MR.FARHAN.420
- * 📞 WHATSAPP : +880 1934640061
- * 📍 LOCATION : CHUADANGA,BANGLADESH
- * 🛠️ PROJECT  : FARHAN BOT PROJECT (2026)
+ * 🔐 [ FILE CREATOR INFORMATION-NIJHUM BOT ]
+ * 👤 OWNER    : SIYAM HASAN
+ * 🆔 UID      : 61568411310748
+ * 🔗 FACEBOOK : https://facebook.com/61568411310748
+ * 📞 WHATSAPP : +880 1789138154
+ * 📍 LOCATION : KISHOREGANJ, BANGLADESH
+ * 🛠️ PROJECT  : SIYAM BOT PROJECT (2026)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
 onStart: async function ({ api, event }) {
 const { threadID, messageID, senderID } = event;
 

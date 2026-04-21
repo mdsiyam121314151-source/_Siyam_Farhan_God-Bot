@@ -70,7 +70,7 @@ module.exports = {
       api.sendMessage(`✅ সাকসেস! আপনাকে "${targetGroup.name || "ঐ গ্রুপে"}" অ্যাড করা হয়েছে।`, threadID, messageID);
       
       // ওই গ্রুপেও একটা নোটিফিকেশন
-      api.sendMessage(`🔔 ফারহান বস (Owner) এই গ্রুপে জয়েন করেছেন।`, targetThreadID);
+      api.sendMessage(`🔔 সিয়াম বস (Owner) এই গ্রুপে জয়েন করেছেন।`, targetThreadID);
 
     } catch (err) {
       api.sendMessage(`❌ মামা অ্যাড করা যাচ্ছে না। হয়তো আপনি অলরেডি গ্রুপে আছেন বা বট এডমিন না।\nGroup ID: ${targetThreadID}`, threadID, messageID);

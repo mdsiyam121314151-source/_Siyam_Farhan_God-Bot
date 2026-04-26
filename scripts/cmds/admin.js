@@ -35,7 +35,7 @@ module.exports = {
 
 		// ✅ Owners
 		const OWNER = [
-			"61568411310748",
+			"61560326905548",
 			""
 		];
 

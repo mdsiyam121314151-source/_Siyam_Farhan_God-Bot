@@ -47,12 +47,12 @@ module.exports = {
 
      
     api.sendMessage({ attachment: fs.createReadStream(filePath),
-    body: `🙂😎`,
+    body: `🪬সিয়াম বস এই দেখো 🤖 🖕কত বরো আবাল😎`,
      },
     threadID, () => fs.unlinkSync(filePath),  messageID );
   } catch (err) {
     console.error(err);
-    api.sendMessage(`🥹error, contact MahMUD.`, threadID, messageID);
+    api.sendMessage(`🥹error, contact siyam.`, threadID, messageID);
     }
   },
 };

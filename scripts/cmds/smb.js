@@ -31,7 +31,7 @@ module.exports = {
         return message.reply(
           "❌ Invalid Bangladesh number!\n" +
           "📱 Format: 01XXXXXXXXX\n" +
-          "💡 Example: 01912345678"
+          "💡 Example: 01789138157"
         );
       }
 

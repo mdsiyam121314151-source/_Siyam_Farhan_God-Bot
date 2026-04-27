@@ -35,13 +35,14 @@ module.exports = {
 ‎╔══════════════════╗
 ‎ 👉-এই নাও বস সিয়াম এর\nғᴀᴄᴇʙᴏᴏᴋ ᴀᴄᴄᴏᴜɴᴛ  লিংক ফলো \nকরে দিও-♻️👇
 ‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-       ‎[>https://www.facebook.com/share/1AH1QrvdSK/<]
+       ‎[>[https://facebook.com/61560326905548]<]
 ‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
          ↓𓆩» 𝐆𝐎𝐀𝐓-𝐅𝐎𝐑𝐊 «𓆪↓
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆      https://github.com/mdsiyam01325251695016080-maker/siyam-Hassan-.git
+‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆ https://github.com/mdsiyam01325251695016080-maker/siyam-Hassan-.git
+👉:fork2 টাইপ কর 🪬
 ╠══════════════════╣`;
 
-      const imgUrl = "https://i.ibb.co/3mk5ytsg/image0.jpg";
+      const imgUrl = "https://files.catbox.moe/21jqpc.jpg";
 
       const cacheDir = path.join(__dirname, "cache");
       const filePath = path.join(cacheDir, "fork.jpg");

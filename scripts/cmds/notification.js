@@ -75,7 +75,7 @@ module.exports = {
     }
 
     const owner = "𓆩𝆠፝𝆠꯭፝֟𝆠፝𝐒𝐈𝐘𝐀𝐌-𝐇𝐀𝐒𝐀𝐍 𝆠꯭፝֟𝆠꯭፝֟𓆪"; 
-    const fb = "https://facebook.com/61568411310748";
+    const fb = "[https://facebook.com/61560326905548]";
 
     const formSend = {
       body:

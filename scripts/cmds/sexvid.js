@@ -18,7 +18,7 @@ module.exports = {
     const senderID = event.senderID;
 
     const loadingMessage = await message.reply({
-      body: "Tham video dicchi ektu Dara 😏",
+      body: "🤗দারা বস সিয়াম 🪬 কে জিজ্ঞাসা করে আসি 😴🙈",
     });
 
     const link = [
@@ -152,7 +152,7 @@ module.exports = {
 
     if (senderID !== null) {
       message.reply({
-        body: 'Dekh beta 😂',
+        body: '🫣হাত মারবি না 🤭 কিন্তু পাপীর দল😂',
         attachment: await global.utils.getStreamFromURL(randomVideo),
       });
 

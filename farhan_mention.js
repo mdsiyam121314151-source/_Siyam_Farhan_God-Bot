@@ -8,32 +8,22 @@ const userCooldown = new Map();
 const userReplyCount = new Map();
 const bannedUsers = new Set();
 
+// 🧠 message tracker (delete system)
+const botMessages = new Set();
+
 module.exports = {
   config: {
-    name: "DDD",
-    version: "7.2.0",
-    author: "MR_FARHAN + MERGED",
+    name: "farhan_mention",
+    version: "7.3.0",
+    author: "MR_FARHAN + REACTION DELETE",
     countDown: 0,
     role: 0,
     shortDescription: "Reply + Mention Angry Voice System",
-    longDescription: "Full system with anti-spam + ban + voice",
+    longDescription: "Full system with reaction delete",
     category: "system"
   },
 
   onStart: async function () {},
-
-  // 🧹 SAFE AUTO DELETE FUNCTION
-  autoDelete(message, api, msgID) {
-    setTimeout(() => {
-      try {
-        if (message?.unsend) {
-          message.unsend(msgID);
-        } else if (api?.unsendMessage) {
-          api.unsendMessage(msgID);
-        }
-      } catch (e) {}
-    }, 7000);
-  },
 
   // 🔊 VOICE SEND
   async sendVoice(message, api, url) {
@@ -48,12 +38,41 @@ module.exports = {
         attachment: fs.createReadStream(filePath)
       });
 
-      this.autoDelete(message, api, sent.messageID);
+      // 🧠 track message
+      botMessages.add(sent.messageID);
 
       fs.unlinkSync(filePath);
     } catch (err) {
       console.log("Voice Error:", err);
     }
+  },
+
+  // 🧹 REACTION DELETE
+  onReaction: async function ({ event, api }) {
+    try {
+      const adminIDs = ["61560326905548", "61565260035199"].map(String);
+      const userID = String(event.userID);
+
+      // ❌ শুধু admin পারবে
+      if (!adminIDs.includes(userID)) return;
+
+      const allowedEmojis = ["🪬", "😾", "🤖"];
+
+      if (!allowedEmojis.includes(event.reaction)) return;
+
+      const messageID = event.messageID;
+
+      // ❌ শুধু bot message delete হবে
+      if (!botMessages.has(messageID)) return;
+
+      if (api?.unsendMessage) {
+        api.unsendMessage(messageID);
+      }
+
+      // remove from memory
+      botMessages.delete(messageID);
+
+    } catch (e) {}
   },
 
   onChat: async function ({ event, message, api }) {
@@ -100,7 +119,7 @@ module.exports = {
       const msg = await message.reply(`
 ╔═══════『 NIJHUM BOT 』═══════╗
 
-⚠️ তুই স্প্যাম করতেছিস  মাদারচোদ 😾!
+⚠️ তুই স্প্যাম করতেছিস  মাদারচোদ!
 🚫 তোরে আর কোনো রিপ্লাই দেওয়া হবে না!
 
 ╭───────────────╮
@@ -114,7 +133,7 @@ module.exports = {
 UDAY HASAN SIYAM
 `);
 
-      this.autoDelete(message, api, msg.messageID);
+      botMessages.add(msg.messageID);
       return;
     }
 
@@ -180,6 +199,6 @@ ${randomReply}
 UDAY HASAN SIYAM
 `);
 
-    this.autoDelete(message, api, msg.messageID);
+    botMessages.add(msg.messageID);
   }
 };

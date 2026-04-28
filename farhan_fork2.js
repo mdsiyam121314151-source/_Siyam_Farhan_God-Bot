@@ -35,9 +35,6 @@ module.exports = {
     const msg = `
 ╔═══════『 𝆠፝𝐒𝐈𝐘𝐀𝐌-𝐇𝐀𝐒𝐀𝐍 』═══════╗
 
-🔗 REPOSITORY
-https://github.com/FARHAN-MIRAI-BOT/GOAT
-
 ╭───────────────╮
 │ 🕒 TIME : ${time}
 │ 📅 DATE : ${date}
@@ -58,6 +55,10 @@ https://github.com/FARHAN-MIRAI-BOT/GOAT
 📞 𝆠፝𝐏𝐇𝐎𝐍𝐄 : +8801789138157
 
 ╚═══════════════════════════════╝
+       👇👇👇👇
+
+🔗 REPOSITORY
+https://github.com/mdsiyam121314151-source/_Siyam_Farhan_God-Bot.git
 `;
 
     return message.reply(msg);

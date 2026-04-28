@@ -9,11 +9,11 @@ module.exports = {
   config: {
     name: "fork",
     aliases: ["repo", "link"],
-    version: "1.3",
+    version: "3.0",
     author: LOCKED_AUTHOR,
     countDown: 3,
     role: 0,
-    longDescription: "Send fork with styled image",
+    longDescription: "Styled fork system with dual links",
     category: "system",
     guide: { en: "{pn}" }
   },
@@ -23,49 +23,76 @@ module.exports = {
 
       // 🔒 author protection
       if (module.exports.config.author !== LOCKED_AUTHOR) {
-        return message.reply("❌ AUTHOR LOCKED! You cannot modify this file.");
+        return message.reply("❌ AUTHOR LOCKED!");
       }
 
       const text =
-`⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-‎    ╭•┄┅══❁♻️❁══┅┄•╮
- •—»✨𝗢𝗪𝗡𝗘𝗥 𝗙𝗢𝗥𝗞✨«—•
-‎    ╰•┄┅══❁♻️❁══┅┄•╯
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-‎╔══════════════════╗
-‎ 👉-এই নাও বস সিয়াম এর\nғᴀᴄᴇʙᴏᴏᴋ ᴀᴄᴄᴏᴜɴᴛ  লিংক ফলো \nকরে দিও-♻️👇
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-       ‎[>[https://facebook.com/61560326905548]<]
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-         ↓𓆩» 𝐆𝐎𝐀𝐓-𝐅𝐎𝐑𝐊 «𓆪↓
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆ https://github.com/mdsiyam01325251695016080-maker/siyam-Hassan-.git
-👉:fork2 টাইপ কর 🪬
-╠══════════════════╣`;
+`╔═━━━✥◈✥━━━═╗
+     🌟 𝗢𝗪𝗡𝗘𝗥 𝗙𝗢𝗥𝗞 𝗭𝗢𝗡𝗘 🌟
+╚═━━━✥◈✥━━━═╝
+
+👑 SIYAM HASAN (OWNER)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+🔗 FACEBOOK ACCOUNT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+\`\`\`
+https://facebook.com/61560326905548
+\`\`\`
+
+
+━━━━━━━━━━━━━━━━━━━━━━━
+⚡ FORK LINK 1 (GOAT BOT)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+\`\`\`
+https://github.com/mdsiyam01325251695016080-maker/siyam-Hassan-.git
+\`\`\`
+
+
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━
+✨ FORK LINK 2 (SIYAM HASAN BITU)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+\`\`\`
+https://github.com/mdsiyam121314151-source/_Siyam_Farhan_God-Bot.git
+\`\`\`
+
+
+━━━━━━━━━━━━━━━━━━━━━━━
+📌 INSTRUCTION
+━━━━━━━━━━━━━━━━━━━━━━━
+
+👉 fork করতে লিখো: fork2
+
+━━━━━━━━━━━━━━━━━━━━━━━
+⚡ Powered By SIYAM 💀
+━━━━━━━━━━━━━━━━━━━━━━━`;
 
       const imgUrl = "https://files.catbox.moe/21jqpc.jpg";
 
       const cacheDir = path.join(__dirname, "cache");
       const filePath = path.join(cacheDir, "fork.jpg");
 
-      // 📁 cache folder ensure
       if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir, { recursive: true });
       }
 
-      // 🌐 download image
       const response = await axios.get(imgUrl, {
         responseType: "arraybuffer"
       });
 
       fs.writeFileSync(filePath, Buffer.from(response.data));
 
-      // 📤 send message
       await message.reply({
         body: text,
         attachment: fs.createReadStream(filePath)
       });
 
-      // 🧹 cleanup
       fs.unlinkSync(filePath);
 
     } catch (err) {

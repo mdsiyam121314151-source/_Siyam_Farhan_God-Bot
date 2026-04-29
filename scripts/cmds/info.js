@@ -1,55 +1,17 @@
 const moment = require("moment-timezone");
-const fs = require("fs");
-const { getStreamFromURL } = global.utils;
-
-// ================== 🔒 AUTHOR LOCK SYSTEM ==================
-const AUTHOR = "FARHAN-KHAN";
-const FILE = __filename;
-
-(function lockFile() {
-  try {
-    const data = fs.readFileSync(FILE, "utf8");
-
-    if (!data.includes(`author: "${AUTHOR}"`)) {
-      console.log("❌ AUTHOR CHANGED! FILE LOCKED.");
-      module.exports = {
-        config: { name: "locked", version: "0.0.0", author: "SYSTEM" },
-        onStart: async function () {
-          return console.log("🚫 This file is locked بسبب author change!");
-        }
-      };
-      return;
-    }
-
-    if (!data.includes("🌺") || !data.includes("😽")) {
-      console.log("❌ DESIGN MODIFIED! FILE LOCKED.");
-      module.exports = {
-        config: { name: "locked", version: "0.0.0", author: "SYSTEM" },
-        onStart: async function () {
-          return console.log("🚫 File locked بسبب design change!");
-        }
-      };
-      return;
-    }
-
-  } catch (e) {
-    console.log("Lock Error:", e);
-  }
-})();
-// ===========================================================
 
 module.exports = {
   config: {
     name: "info",
-    version: "2.6.0",
-    author: "FARHAN-KHAN",
+    version: "4.1.2",
+    author: "Siyam",
     role: 0,
     countDown: 20,
     shortDescription: {
-      en: "Owner & bot information"
+      en: "Owner & bot info"
     },
     longDescription: {
-      en: "Show detailed information about the bot, owner, uptime and socials"
+      en: "Show full stylish info"
     },
     category: "owner",
     guide: {
@@ -57,87 +19,101 @@ module.exports = {
     }
   },
 
-  onStart: async function ({ message }) {
+  onStart: async function ({ message, event, api }) {
 
-    // ================= OWNER INFO =================
-    const ownerName = "UDAY HASAN SIYAM";
-    const ownerAge = "17+";
-    const ownerFB = "https://www.facebook.com/share/14k1GZFVH2T/";
-    const ownerNumber = "+8801789138157";
+    const totalCommands = global.GoatBot?.commands?.size || 0;
 
-    // ================= BOT INFO =================
-    const botName = global.GoatBot?.config?.nickNameBot || "NIJHUM";
-    const prefix = global.GoatBot?.config?.prefix || ".";
-    const totalCommands = global.GoatBot?.commands?.size || 225;
-
-    // ================= MEDIA =================
-    const images = [
-      "https://files.catbox.moe/8f2fc5.mp4"
-    ];
-    const image = images[Math.floor(Math.random() * images.length)];
-
-    // ================= TIME =================
     const now = moment().tz("Asia/Dhaka");
     const date = now.format("MMMM Do YYYY");
     const time = now.format("h:mm:ss A");
 
-    // ================= UPTIME =================
     const uptime = process.uptime();
     const days = Math.floor(uptime / 86400);
     const hours = Math.floor((uptime % 86400) / 3600);
     const minutes = Math.floor((uptime % 3600) / 60);
     const seconds = Math.floor(uptime % 60);
+
     const uptimeString = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-    // ================= OUTPUT =================
+    const prefix = global.utils.getPrefix(event.threadID);
+    const groupName = event.threadName || "Unknown Group";
+
+    // ✅ AUTO BOT NAME SYSTEM
+    let botName = "Unknown Bot";
+    try {
+      const botID = api.getCurrentUserID();
+      const botInfo = await api.getUserInfo(botID);
+      botName = botInfo[botID]?.name || "Bot";
+    } catch (e) {}
+
+    const videoLink = "https://files.catbox.moe/8f2fc5.mp4";
+
     return message.reply({
-      body: `⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
-‎    ╭•┄┅══❁🌺❁══┅┄•╮
- •—»✨𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢✨«—•
-‎    ╰•┄┅══❁🌺❁══┅┄•╯
-‎⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
+      body: `
+👑 ╭─❖ 𝐁𝐎𝐓 𝐎𝐖𝐍𝐄𝐑 ❖─╮
+   ╰➤ 𝐔𝐃𝐀𝐘 𝐇𝐎𝐒𝐒𝐄𝐈𝐍 𝐒𝐈𝐘𝐀𝐌
 
-╔══════════════════════╗
-║ 👑 𝗢𝗪𝗡𝗘𝗥 ➤ 𝗨𝗗𝗔𝗬 𝗛𝗔𝗦𝗔𝗡 𝗦𝗜𝗬𝗔𝗠
-║ 🤖 𝗕𝗢𝗧 ➤ ${botName}
-╠══════════════════════╣
-║ 🕌 𝗥𝗘𝗟𝗜𝗚𝗜𝗢𝗡 ➤ 𝗜𝗦𝗟𝗔𝗠
-║ 🎂 𝗔𝗚𝗘 ➤ 𝟭𝟳+
-║ 🚹 𝗚𝗘𝗡𝗗𝗘𝗥 ➤ 𝗠𝗔𝗟𝗘
-╠══════════════════════╣
-║ 🌐 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 ↓
-║ ➤ ${ownerFB}
-║
-║ 📞 𝗪𝗛𝗔𝗧𝗦𝗔𝗣𝗣 ↓
-║ ➤ ${ownerNumber}
-╠══════════════════════╣
-║ ⚡ 𝗣𝗥𝗘𝗙𝗜𝗫 ➤ ${prefix}
-║ 📦 𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦 ➤ ${totalCommands}
-║ 🚀 𝗣𝗜𝗡𝗚 ➤ N/A
-╠══════════════════════╣
-║ ⏳ 𝗨𝗣𝗧𝗜𝗠𝗘 ➤ ${uptimeString}
-║ 🕒 𝗧𝗜𝗠𝗘 ➤ ${time}
-║ 📅 𝗗𝗔𝗧𝗘 ➤ ${date}
-╠══════════════════════╣
-║ 🏠 𝗔𝗗𝗗𝗥𝗘𝗦𝗦
-║ ➤ 𝗞𝗜𝗦𝗛𝗢𝗥𝗘𝗚𝗔𝗡𝗝
-║ ➤ 𝗕𝗔𝗡𝗚𝗟𝗔𝗗𝗘𝗦𝗛
-║
-║ 💔 𝗦𝗧𝗔𝗧𝗨𝗦 ➤ 𝗦𝗜𝗡𝗚𝗟𝗘
-║ 🧑‍🎓 𝗪𝗢𝗥𝗞 ➤ 𝗦𝗧𝗨𝗗𝗘𝗡𝗧
-╠══════════════════════╣
+🤖 ╭─❖ 𝐁𝐎𝐓 𝐍𝐀𝐌𝐄 ❖─╮
+   ╰➤ ${botName}
 
-⊱༅༎😽💚༅༎⊱
-➤ আমি নিজের মতোই চলি 😎  
-➤ আমি কপি না, আমি আলাদা 🔥  
-➤ যারে ভালোবাসি, শেষ পর্যন্ত 🖤  
-⊱༅༎😽💚༅༎⊱
+🎂 ╭─❖ 𝐀𝐆𝐄 ❖─╮
+   ╰➤ 𝟏𝟔
 
-╠══════════════════════╣
-♡ 𝗧𝗛𝗔𝗡𝗞𝗦 𝗙𝗢𝗥 𝗨𝗦𝗜𝗡𝗚 ♡
-      ♡ 𝗡𝗜𝗝𝗛𝗨𝗠 𝗕𝗢𝗧 ♡
-╚══════════════════════╝`,
-      attachment: await getStreamFromURL(image)
+🚻 ╭─❖ 𝐆𝐄𝐍𝐃𝐄𝐑 ❖─╮
+   ╰➤ 𝐌𝐀𝐋𝐄
+
+☪ ╭─❖ 𝐑𝐄𝐋𝐈𝐆𝐈𝐎𝐍 ❖─╮
+   ╰➤ 𝐈𝐒𝐋𝐀𝐌
+
+🌐 ╭─❖ 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 ❖─╮
+   ╰➤ https://facebook.com/61560326905548
+
+💬 ╭─❖ 𝐌𝐄𝐒𝐒𝐄𝐍𝐆𝐄𝐑 ❖─╮
+   ╰➤ https://facebook.com/61560326905548
+
+📞 ╭─❖ 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 ❖─╮
+   ╰➤ +8801789138157
+
+👑 ╭─❖ 𝐆𝐑𝐎𝐔𝐏 ❖─╮
+   ╰➤ ${groupName}
+
+⚙️ ╭─❖ 𝐏𝐑𝐄𝐅𝐈𝐗 ❖─╮
+   ╰➤ ${prefix}
+
+💬 ╭─❖ 𝐇𝐄𝐋𝐏 ❖─╮
+   ╰➤ ${prefix}help2
+
+📦 ╭─❖ 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 ❖─╮
+   ╰➤ ${totalCommands}
+
+⏳ ╭─❖ 𝐔𝐏𝐓𝐈𝐌𝐄 ❖─╮
+   ╰➤ ${uptimeString}
+
+🕒 ╭─❖ 𝐓𝐈𝐌𝐄 ❖─╮
+   ╰➤ ${time}
+
+📅 ╭─❖ 𝐃𝐀𝐓𝐄 ❖─╮
+   ╰➤ ${date}
+
+🏠 ╭─❖ 𝐀𝐃𝐃𝐑𝐄𝐒𝐒 ❖─╮
+   ╰➤ 𝐊𝐈𝐒𝐇𝐎𝐑𝐄𝐆𝐀𝐍𝐉 → 𝐁𝐀𝐍𝐆𝐋𝐀𝐃𝐄𝐒𝐇
+
+🏫 ╭─❖ 𝐒𝐂𝐇𝐎𝐎𝐋 ❖─╮
+   ╰➤ 𝐌 𝐀 𝐌𝐀𝐍𝐍𝐀𝐍 𝐌𝐀𝐍𝐈𝐊 𝐇𝐈𝐆𝐇 𝐒𝐂𝐇𝐎𝐎𝐋
+
+💔 ╭─❖ 𝐑𝐄𝐋𝐀𝐓𝐈𝐎𝐍𝐒𝐇𝐈𝐏 ❖─╮
+   ╰➤ 𝐒𝐈𝐍𝐆𝐋𝐄
+
+🛠 ╭─❖ 𝐖𝐎𝐑𝐊 ❖─╮
+   ╰➤𝐍𝐎𝐓 𝐖𝐎𝐑𝐊𝐈𝐍𝐆
+
+🔥 ╭─❖ 𝐀𝐓𝐓𝐈𝐓𝐔𝐃𝐄 ❖─╮
+   ╰➤ আমি ভদ্র, কিন্তু কেউ আমাকে হালকাভাবে নিতে পারবে না
+   ╰➤ আমি যেটা চাই তা অর্জন করি, কারো চাপে চলি না
+
+╚═══━━━✦🔥
+`,
+      attachment: await global.utils.getStreamFromURL(videoLink)
     });
   }
 };

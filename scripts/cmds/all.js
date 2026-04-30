@@ -5,7 +5,7 @@ const AUTHOR = "SIYAM"; // 🔒 DO NOT CHANGE
 module.exports = {
 	config: {
 		name: "all",
-		version: "2.0",
+		version: "2.1",
 		author: AUTHOR, // 🔒 LOCKED
 		countDown: 5,
 		role: 1,
@@ -23,42 +23,66 @@ module.exports = {
 			process.exit(1);
 		}
 
-		const { participantIDs } = event;
-		const mentions = [];
+		try {
+			const { participantIDs } = event;
+			const mentions = [];
 
-		// 🔥 Stylish Message
-		let body = `╔═══❖•ೋ° 🌟 °ೋ•❖═══╗
-📢 𝐀𝐓𝐓𝐄𝐍𝐓𝐈𝐎𝐍 𝐄𝐕𝐄𝐑𝐘𝐎𝐍𝐄 📢
-╚═══❖•ೋ° 🌟 °ೋ•❖═══╝
+			// ✅ FIX: auto bot name + prefix
+			const botName = global.config?.BOTNAME || "UNKNOWN BOT";
+			const prefix = global.config?.PREFIX || "/";
 
-👥 @everyone
-🚨 চিপা থেকে বাহির হও এখনই!
+			// 🔥 Stylish Message (UNCHANGED)
+			let body = `╔═══❖ 👑 𝐑𝐎𝐘𝐀𝐋 𝐁𝐑𝐎𝐀𝐃𝐂𝐀𝐒𝐓 👑 ❖═══╗
+┃
+┃ 📢 𝐀𝐓𝐓𝐄𝐍𝐓𝐈𝐎𝐍 𝐄𝐕𝐄𝐑𝐘𝐎𝐍𝐄 📢
+┃
+┣━━━━━━━━━━━━━━━━━━━┫
+┃ 👥 @everyone
+┃ 🚨 চিপা থেকে বাহির 📢..
+┃👺 ..হও এখনই🤬🤷!
+┃
+┃ ❗ 🌚একটা করে🤭
+┃  😁 ☺️..জামাই দিমু😽🐸...
+┃ ❄️ 🌝আর একটা🤐
+┃ 😋  করে বউ 😼🐸
+┃
+┃ 👑 এখনো বের হলি না😾
+┃ 📢 দাঁড়া আসতেছি🐸..
+┃ 
+┃ 😸চিপার মধ্যে
+┃ 👺বরফ দিমু 😼🐸..
+┃
+┣━━━━━━━━━━━━━━━━━━━┫
+┃ 🤖 𝐁𝐎𝐓: ${botName}
+┃ ⚙️ 𝐏𝐑𝐄𝐅𝐈𝐗: ${prefix}
+┃
+┣━━━━━━━━━━━━━━━━━━━┫
+┃ 🔗 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊:
+┃ 🌐 https://facebook.com/61560326905548
+┃
+┣━━━━━━━━━━━━━━━━━━━┫
+┃ ⚡ 𝐑𝐄𝐒𝐏𝐄𝐂𝐓 𝐓𝐇𝐄 𝐁𝐎𝐒𝐒 😎
+┃ 🔒 𝐏𝐎𝐖𝐄𝐑𝐄𝐃 𝐁𝐘 ${botName}
+┃
+╚═══❖ ✨ 𝐏𝐑𝐄𝐌𝐈𝐔𝐌 𝐒𝐘𝐒𝐓𝐄𝐌 ✨ ❖═══╝`;
 
-❗ না হলে...
-❄️ চিপায় ঠান্ডা দিমু 😼🔥
+			// ✅ safe mention index
+			let index = body.indexOf("@everyone");
+			if (index < 0) index = 0;
 
-👑 বস সিয়াম এর রাগ উঠতাছে 💙
+			for (const uid of participantIDs) {
+				mentions.push({
+					tag: "@",
+					id: uid,
+					fromIndex: index
+				});
+			}
 
-━━━━━━━━━━━━━━━━━━━
+			return message.reply({ body, mentions });
 
-🔗 Facebook Link:
-🌐 https://www.facebook.com/profile.php?id=61568411310748 ✨
-
-━━━━━━━━━━━━━━━━━━━
-
-⚡ Respect the Boss 😎
-`;
-
-		let index = body.indexOf("@everyone");
-
-		for (const uid of participantIDs) {
-			mentions.push({
-				tag: "@",
-				id: uid,
-				fromIndex: index
-			});
+		} catch (err) {
+			console.error(err);
+			return message.reply("❌ Error:\n" + err.message);
 		}
-
-		return message.reply({ body, mentions });
 	}
 };

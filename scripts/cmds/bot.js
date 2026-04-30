@@ -6,8 +6,8 @@ module.exports = {
 config: {
 name: "bot",
 aliases: ["mbot", "milonbot"],
-version: "10.0.0",
-author: "Milon",
+version: "10.0.1",
+author: "Milon (fixed by siyam)",
 countDown: 0,
 role: 0,
 description: "High-speed bot with extra dialogues and fixed mentions",
@@ -15,11 +15,13 @@ category: "fun",
 guide: { en: "{pn} [text]" }
 },
 
+// ✅ COMMAND
 onStart: async function ({ api, event, args, usersData }) {
 const { threadID, messageID, senderID } = event;
 
 try {
 const name = await usersData.getName(senderID);
+
 if (!args[0]) {
 return api.sendMessage({
 body: `「 ${name} 」\nবলুন আমি "বট" আপনাকে কিভাবে সাহায্য করতে পারি?`,
@@ -27,48 +29,77 @@ mentions: [{ tag: name, id: senderID }]
 }, threadID, messageID);
 }
 
+// ✅ TEACH SYSTEM
 if (args[0] === 'teach') {
 const [q, a] = args.slice(1).join(" ").split(/\s*-\s*/);
 if (!q || !a) return api.sendMessage("⚠️ Format: teach ask - reply", threadID, messageID);
+
 const { data } = await axios.get(`${baseApiUrl}?teach=${encodeURIComponent(q)}&reply=${encodeURIComponent(a)}&senderID=${senderID}`);
 return api.sendMessage(`✅ Added: ${data.message}`, threadID, messageID);
 }
 
+// ✅ NORMAL CHAT
 const { data } = await axios.get(`${baseApiUrl}?text=${encodeURIComponent(args.join(" "))}&senderID=${senderID}&font=1`);
+
 return api.sendMessage(data.reply, threadID, (err, info) => {
-if (global.GoatBot?.onReply) global.GoatBot.onReply.set(info.messageID, { commandName: "bot", messageID: info.messageID, author: senderID });
+if (!err && global.GoatBot?.onReply) {
+global.GoatBot.onReply.set(info.messageID, {
+commandName: "bot",
+messageID: info.messageID,
+author: senderID
+});
+}
 }, messageID);
+
 } catch {
 return api.sendMessage("API Busy!", threadID, messageID);
 }
 },
 
-onReply: async ({ api, event }) => {
-if (api.getCurrentUserID() == event.senderID) return;
+// ✅ FIXED REPLY SYSTEM (MAIN FIX 🔥)
+onReply: async ({ api, event, Reply }) => {
 try {
-const { data } = await axios.get(`${baseApiUrl}?text=${encodeURIComponent(event.body)}&senderID=${event.senderID}&font=1`);
-api.sendMessage(data.reply, event.threadID, (err, info) => {
-if (global.GoatBot?.onReply) global.GoatBot.onReply.set(info.messageID, { commandName: "bot", messageID: info.messageID, author: event.senderID });
+// 🔒 only same user continues
+if (event.senderID != Reply.author) return;
+
+const { data } = await axios.get(
+`${baseApiUrl}?text=${encodeURIComponent(event.body || "hi")}&senderID=${event.senderID}&font=1`
+);
+
+return api.sendMessage(data.reply, event.threadID, (err, info) => {
+if (!err && global.GoatBot?.onReply) {
+global.GoatBot.onReply.set(info.messageID, {
+commandName: "bot",
+messageID: info.messageID,
+author: event.senderID
+});
+}
 }, event.messageID);
-} catch (err) {}
+
+} catch (err) {
+return api.sendMessage("⚠️ Reply error!", event.threadID, event.messageID);
+}
 },
 
+// ✅ AUTO CHAT
 onChat: async ({ api, event, usersData }) => {
 const { body, senderID, threadID, messageID } = event;
 if (!body) return;
+
 const lowerBody = body.toLowerCase();
 
 if (
 lowerBody.startsWith("bot") ||
 lowerBody.startsWith("বট") ||
-lowerBody.startsWith("baby") ||
+lowerBody.startsWith("দিসারি") ||
 lowerBody.startsWith("bby") ||
 lowerBody.startsWith("নিঝুম") ||
-lowerBody.startsWith("nijhum")
+lowerBody.startsWith("বাল")
 ) {
 
 const text = body.replace(/^(bot|বট|baby|bby|নিঝুম|nijhum)\s*/i, "").trim();
 
+// ✅ NO TEXT → RANDOM REPLY
 if (!text) {
 const name = await usersData.getName(senderID);
 
@@ -130,15 +161,30 @@ return api.sendMessage({
 body: `「 ${name} 」\n\n${rand}`,
 mentions: [{ tag: name, id: senderID }]
 }, threadID, (err, info) => {
-if (global.GoatBot?.onReply) global.GoatBot.onReply.set(info.messageID, { commandName: "bot", messageID: info.messageID, author: senderID });
+if (!err && global.GoatBot?.onReply) {
+global.GoatBot.onReply.set(info.messageID, {
+commandName: "bot",
+messageID: info.messageID,
+author: senderID
+});
+}
 }, messageID);
 }
 
+// ✅ WITH TEXT → API CALL
 try {
 const { data } = await axios.get(`${baseApiUrl}?text=${encodeURIComponent(text)}&senderID=${senderID}&font=1`);
+
 api.sendMessage(data.reply, threadID, (err, info) => {
-if (global.GoatBot?.onReply) global.GoatBot.onReply.set(info.messageID, { commandName: "bot", messageID: info.messageID, author: senderID });
+if (!err && global.GoatBot?.onReply) {
+global.GoatBot.onReply.set(info.messageID, {
+commandName: "bot",
+messageID: info.messageID,
+author: senderID
+});
+}
 }, messageID);
+
 } catch (err) {}
 }
 }

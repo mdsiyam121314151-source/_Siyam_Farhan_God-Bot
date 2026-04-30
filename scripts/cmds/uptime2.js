@@ -10,7 +10,7 @@ config: {
 name: "up2",
 aliases: ["uptime2", "Up2"],
 version: "22.0.0",
-author: "MR_FARHAN",
+author: "SIYAM HASAN",
 countDown: 5,
 role: 0,
 category: "system",
@@ -19,7 +19,6 @@ usePrefix: true
 },
 
 onStart: async function ({ api, event, args }) {
-// onStart ekhon shudhu prefix wala command handle korbe (Normal users)
 return this.handleUptime({ api, event });
 },
 
@@ -27,7 +26,6 @@ onChat: async function ({ api, event }) {
 const { body, senderID } = event;
 if (!body) return;
 
-// Hardcoded Admin UID check for No Prefix
 const adminUID = "61588452928616";
 const msg = body.toLowerCase();
 
@@ -39,7 +37,6 @@ return this.handleUptime({ api, event });
 handleUptime: async function ({ api, event }) {
 const { threadID, messageID, senderID } = event;
 
-// STEP 1: Sending Checking Message
 const sendChecking = await api.sendMessage("🔍 Checking system status, please wait...", threadID);
 
 const timeStart = Date.now();
@@ -61,7 +58,7 @@ userName = info[senderID].name;
 
 const imgUrl = "https://i.imgur.com/TDkyAdv.jpeg";
 const userImgUrl = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
-const cachePath = path.join(__dirname, "cache", `up_milon_final_${Date.now()}.png`);
+const cachePath = path.join(__dirname, "cache", `up_siyam_final_${Date.now()}.png`);
 
 try {
 if (!fs.existsSync(path.join(__dirname, "cache"))) fs.ensureDirSync(path.join(__dirname, "cache"));
@@ -74,7 +71,7 @@ ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-// --- USER PROFILE (Box 220x220) ---
+// --- USER PROFILE ---
 const boxSize = 220;
 const boxX = centerX - (boxSize / 2);
 const boxY = centerY - (boxSize / 2) + 15;
@@ -124,34 +121,43 @@ ctx.textAlign = "center";
 ctx.font = "bold 24px Arial";
 ctx.fillStyle = "#00ff00";
 ctx.fillText("● SYSTEM STATUS: ACTIVE", centerX, canvas.height - 65);
+
+// 🔥 UPDATED NAME
 ctx.font = "italic bold 18px Arial"; 
 ctx.fillStyle = "#FFD700"; 
-ctx.fillText("DEVELOPED BY:-FARHAN-KHAN", centerX, canvas.height - 95);
+ctx.fillText("DEVELOPED BY:- 👑 𝐒𝐈𝐘𝐀𝐌 𝐇𝐎𝐒𝐒𝐄𝐈𝐍 👑 ", centerX, canvas.height - 95);
 
-// Bot Name & Date
+// Bot Name
 ctx.textAlign = "left";
 ctx.font = "bold 30px Arial";
 ctx.shadowColor = "#0000ff"; ctx.shadowBlur = 15;
 ctx.fillStyle = "#33ccff";
-ctx.fillText("[SIZUKA-BOT]", 199, 128); 
+
+// 🔥 UPDATED BOT NAME
+ctx.fillText("[👑𝐍𝐈𝐉𝐇𝐔𝐌 𝐂𝐇𝐀𝐓 𝐁𝐎𝐓👑]", 199, 128); 
 
 const dateX = centerX + 82;
 const dateY = 120; 
 ctx.shadowBlur = 20; ctx.shadowColor = "#FF00FF";
 ctx.textAlign = "center";
 ctx.font = "bold 22px Arial";
+
 const gradient = ctx.createLinearGradient(dateX - 70, dateY, dateX + 70, dateY);
-gradient.addColorStop(0, "#FF0000"); gradient.addColorStop(0.5, "#00FF00"); gradient.addColorStop(1, "#0000FF");
+gradient.addColorStop(0, "#FF0000"); 
+gradient.addColorStop(0.5, "#00FF00"); 
+gradient.addColorStop(1, "#0000FF");
+
 ctx.fillStyle = "#FFFFFF"; 
 ctx.fillText(`| ${currentDate}`, dateX, dateY);
+
 ctx.shadowBlur = 0;
-ctx.strokeStyle = gradient; ctx.lineWidth = 1.5;
+ctx.strokeStyle = gradient; 
+ctx.lineWidth = 1.5;
 ctx.strokeText(`| ${currentDate}`, dateX, dateY);
 
 const buffer = canvas.toBuffer("image/png");
 fs.writeFileSync(cachePath, buffer);
 
-// STEP 2: Send & Delete Checking
 return api.sendMessage({ attachment: fs.createReadStream(cachePath) }, threadID, async (err) => {
 if (!err) api.unsendMessage(sendChecking.messageID);
 if (fs.existsSync(cachePath)) fs.unlinkSync(cachePath);

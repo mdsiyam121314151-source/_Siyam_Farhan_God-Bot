@@ -24,7 +24,7 @@ module.exports = {
     const groupName = event.threadName || "UNKNOWN GROUP";
 
     const mediaLinks = [
-      "https://files.catbox.moe/fiy6vj.gif",
+      "https://files.catbox.moe/41hfau.jpg",
       "https://files.catbox.moe/41hfau.jpg",
       "https://files.catbox.moe/41hfau.jpg"
     ];

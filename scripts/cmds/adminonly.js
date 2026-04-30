@@ -1,58 +1,45 @@
 const fs = require("fs-extra");
+const moment = require("moment-timezone");
 const { config } = global.GoatBot;
 const { client } = global;
 
 // 🔒 LOCKED AUTHOR
 const LOCKED_AUTHOR = "FARHAN-KHAN";
 
-// force lock on load
+// ✨ Premium Compact Bengali Style
+function premiumMsg(title, body) {
+	const time = moment().tz("Asia/Dhaka").format("hh:mm:ss A");
+	const date = moment().tz("Asia/Dhaka").format("DD MMM YYYY");
+
+	return `╔═ 👑 𝑺𝑰𝒀𝑨𝑴 👑 ═╗
+${title}
+━━━━━━━━━━━━
+${body}
+━━━━━━━━━━━━
+📅 ${date} | ⏰ ${time}
+🤖 𝑵𝑰𝑱𝑯𝑼𝑴 𝑩𝑶𝑻`;
+}
+
 module.exports = {
 	config: {
 		name: "adminonly",
 		aliases: ["adonly", "onlyad", "onlyadmin"],
-		version: "1.5",
-		author: LOCKED_AUTHOR, // 🔒 locked author
+		version: "3.2",
+		author: LOCKED_AUTHOR,
 		countDown: 5,
 		role: 1,
 		description: {
-			vi: "bật/tắt chế độ chỉ admin mới có thể sử dụng bot",
-			en: "turn on/off only admin can use bot"
+			en: "Toggle admin-only mode"
 		},
-		category: "owner",
-		guide: {
-			vi: "   {pn} [on | off]: bật/tắt chế độ chỉ admin mới có thể sử dụng bot"
-				+ "\n   {pn} noti [on | off]: bật/tắt thông báo khi người dùng không phải là admin sử dụng bot",
-			en: "   {pn} [on | off]: turn on/off the mode only admin can use bot"
-				+ "\n   {pn} noti [on | off]: turn on/off the notification when user is not admin use bot"
-		}
+		category: "owner"
 	},
 
-	langs: {
-		vi: {
-			turnedOn: "Đã bật chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOff: "Đã tắt chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOnNoti: "Đã bật thông báo khi người dùng không phải là admin sử dụng bot",
-			turnedOffNoti: "Đã tắt thông báo khi người dùng không phải là admin sử dụng bot"
-		},
-		en: {
-			turnedOn: "Turned on the mode only admin can use bot",
-			turnedOff: "Turned off the mode only admin can use bot",
-			turnedOnNoti: "Turned on the notification when user is not admin use bot",
-			turnedOffNoti: "Turned off the notification when user is not admin use bot"
-		}
-	},
+	onStart: function ({ args, message }) {
 
-	onStart: function ({ args, message, getLang }) {
-
-		// 🔒 AUTHOR TAMPER PROTECTION
+		// 🔒 AUTHOR LOCK
 		if (module.exports.config.author !== LOCKED_AUTHOR) {
 			module.exports.config.author = LOCKED_AUTHOR;
-
-			// optional hard protection (bot restart required)
-			fs.writeFileSync(
-				__filename,
-				fs.readFileSync(__filename, "utf8")
-			);
+			fs.writeFileSync(__filename, fs.readFileSync(__filename, "utf8"));
 		}
 
 		let isSetNoti = false;
@@ -64,22 +51,42 @@ module.exports = {
 			indexGetVal = 1;
 		}
 
-		if (args[indexGetVal] == "on")
-			value = true;
-		else if (args[indexGetVal] == "off")
-			value = false;
-		else
-			return message.SyntaxError();
+		if (args[indexGetVal] == "on") value = true;
+		else if (args[indexGetVal] == "off") value = false;
+		else return message.SyntaxError();
 
+		// 🔔 Notification Mode
 		if (isSetNoti) {
 			config.hideNotiMessage.adminOnly = !value;
-			message.reply(getLang(value ? "turnedOnNoti" : "turnedOffNoti"));
-		}
-		else {
-			config.adminOnly.enable = value;
-			message.reply(getLang(value ? "turnedOn" : "turnedOff"));
+
+			return message.reply(
+				premiumMsg(
+					value ? "🔔 নোটিফিকেশন চালু" : "🔕 নোটিফিকেশন বন্ধ",
+					value
+						? "⚠️ নন-এডমিন ব্যবহার করলে সতর্ক বার্তা দেখাবে"
+						: "🤫 নন-এডমিন ব্যবহার করলে কোনো বার্তা দেখাবে না"
+				)
+			);
 		}
 
+		// 🔐 Admin Mode
+		config.adminOnly.enable = value;
 		fs.writeFileSync(client.dirConfig, JSON.stringify(config, null, 2));
+
+		if (value) {
+			return message.reply(
+				premiumMsg(
+					"🔐 এডমিন মোড চালু",
+					"🚫 এখন শুধু বস সিয়াম বট ব্যবহার করতে পারবে\n👑 সিয়াম বস ছাড়া কেউ এক্সেস পাবে না"
+				)
+			);
+		} else {
+			return message.reply(
+				premiumMsg(
+					"🔓 এডমিন মোড বন্ধ",
+					"✅ এখন সবাই বট ব্যবহার করতে পারবে\n🎉 সবাই এনজয় করো"
+				)
+			);
+		}
 	}
 };

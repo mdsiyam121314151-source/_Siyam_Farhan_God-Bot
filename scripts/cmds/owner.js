@@ -1,8 +1,8 @@
-/cmd install owner2.js const moment = require("moment-timezone");
+const moment = require("moment-timezone");
 const fs = require("fs");
 const { getStreamFromURL } = global.utils;
 
-// ================== 🔒 AUTHOR LOCK SYSTEM ==================
+// ================== 🔒 STRONG AUTHOR LOCK ==================
 const AUTHOR = "FARHAN-KHAN";
 const FILE = __filename;
 
@@ -10,8 +10,17 @@ const FILE = __filename;
   try {
     const data = fs.readFileSync(FILE, "utf8");
 
-    if (!data.includes(`author: "${AUTHOR}"`)) return;
-    if (!data.includes("🌺") || !data.includes("😽")) return;
+    // ❌ যদি author change হয় → stop bot
+    if (!data.includes(`author: "${AUTHOR}"`)) {
+      console.log("🚫 AUTHOR TAMPER DETECTED!");
+      process.exit(1);
+    }
+
+    // ❌ যদি design remove করা হয়
+    if (!data.includes("𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢") || !data.includes("😽")) {
+      console.log("🚫 FILE MODIFIED!");
+      process.exit(1);
+    }
 
   } catch (e) {
     console.log("Lock Error:", e);
@@ -19,7 +28,7 @@ const FILE = __filename;
 })();
 // ===========================================================
 
-// ✅ SAFE STREAM (fail হলে crash করবে না)
+// ✅ SAFE STREAM
 async function safeStream(url) {
   try {
     return await getStreamFromURL(url);
@@ -32,22 +41,24 @@ async function safeStream(url) {
 module.exports = {
   config: {
     name: "owner",
-    version: "3.2.1",
+    version: "4.0.0",
     author: "FARHAN-KHAN",
-    role: 0,
-    countDown: 20,
+    role: 2, // 🔒 owner only
+    countDown: 10,
     shortDescription: { en: "Owner info" },
     category: "owner"
   },
 
   onStart: async function ({ message }) {
 
-    const ownerFB = "https://www.facebook.com/share/14k1GZFVH2T/";
+    const ownerFB1 = "https://www.facebook.com/share/14k1GZFVH2T/";
+    const ownerFB2 = "https://www.facebook.com/share/14k1GZFVH2T/"; // চাইলে আলাদা দিতে পারো
 
-    // 🔥 নতুন ভিডিও লিংক (তোর দেওয়া)
     const video = "https://files.catbox.moe/g5vr8h.mp4";
-
     const attachment = await safeStream(video);
+
+    const time = moment().tz("Asia/Dhaka").format("hh:mm:ss A");
+    const date = moment().tz("Asia/Dhaka").format("DD MMMM YYYY");
 
     const msg = {
       body: `╔═══❖𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢❖═══╗
@@ -76,11 +87,14 @@ module.exports = {
 [🚻]↓:𝐆𝐄𝐍𝐃𝐄𝐑:↓
 ➤ 『 𝐌𝐀𝐋𝐄 』
 
-[💞]↓:𝐑𝐑𝐄𝐋𝐀𝐓𝐈𝐎𝐍𝐒𝐇𝐈𝐏:↓
+[💞]↓:𝐑𝐄𝐋𝐀𝐓𝐈𝐎𝐍𝐒𝐇𝐈𝐏:↓
 ➤ 『 𝐒𝐈𝐍𝐆𝐋𝐄 』
 
 [🧑‍🎓]↓:𝐖𝐎𝐑𝐊:↓
 ➤ 『 𝐒𝐓𝐔𝐃𝐄𝐍𝐓 』
+
+📅 Date: ${date}
+⏰ Time: ${time}
 
 ⋆✦⋆═══🅲🅾🅽🆃🅰🅲🆃═══⋆✦⋆
 
@@ -88,15 +102,14 @@ module.exports = {
 ➤ https://wa.me/+8801789138157
 
 [🌍] 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐈𝐃 (❶)
-➤ ${ownerFB}
+➤ ${ownerFB1}
 
 [🌍] 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐈𝐃 (❷)
-➤ ${ownerFB}
+➤ ${ownerFB2}
 
 ╚═══❖𝗧𝗛𝗔𝗡𝗞 𝗬𝗢𝗨❖═══╝`
     };
 
-    // ✅ attachment safe add
     if (attachment) {
       msg.attachment = attachment;
     }

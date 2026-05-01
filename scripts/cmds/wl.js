@@ -1,226 +1,172 @@
 const { config } = global.GoatBot;
+const { writeFileSync } = require("fs-extra");
+const moment = require("moment-timezone");
 
 module.exports = {
-
 	config: {
-
 		name: "wl",
-
-		version: "1.0",
-
-		author: "MR_FARHAN",
-
+		version: "2.0",
+		author: "MR_FARHAN + SIYAM EDIT",
 		countDown: 5,
-
 		role: 2,
-
 		longDescription: {
-
-			en: "Add, remove, edit whiteListIds"
-
+			en: "Manage whiteListIds"
 		},
-
 		category: "owner",
-
 		guide: {
-
-			en: '   {pn} [add | -a] <uid | @tag>: Add admin role for user'
-
-				+ '\n   {pn} [remove | -r] <uid | @tag>: Remove admin role of user'
-
-				+ '\n   {pn} [list | -l]: List all admins'
-
-        + '\n   {pn} [ on | off ]: enable and disable whiteList mode'
-
+			en:
+				"{pn} add <uid | @tag>\n" +
+				"{pn} remove <uid | @tag>\n" +
+				"{pn} list\n" +
+				"{pn} on / off"
 		}
-
 	},
-
 
 	langs: {
-
 		en: {
-
-			added: "✅ | Added whiteList role for %1 users:\n%2",
-
-			alreadyAdmin: "\n⚠ | %1 users already have whiteList role:\n%2",
-
-			missingIdAdd: "⚠ | Please enter ID or tag user to add in whiteListIds",
-
-			removed: "✅ | Removed whiteList role of %1 users:\n%2",
-
-			notAdmin: "⚠ | %1 users don't have whiteListIds role:\n%2",
-
-			missingIdRemove: "⚠ | Please enter ID or tag user to remove whiteListIds",
-
-			listAdmin: "👑 | List of whiteListIds:\n%1",
-
-      enable: "✅ Turned on",
-
-      disable: "✅ Turned off"
-
+			added: "✅ Added:\n%1",
+			removed: "✅ Removed:\n%1",
+			listAdmin: "👑 WhiteList Users:\n%1",
+			missingIdAdd: "⚠️ Give ID or tag",
+			missingIdRemove: "⚠️ Give ID or tag"
 		}
-
 	},
 
-
-	onStart: async function ({ message, args, usersData, event, getLang, api }) {
-
-    const { writeFileSync } = require("fs-extra");
+	onStart: async function ({ message, args, usersData, event, getLang }) {
 
 		switch (args[0]) {
 
+			// ================= ADD =================
 			case "add":
-
 			case "-a": {
+				if (!args[1]) return message.reply(getLang("missingIdAdd"));
 
-				if (args[1]) {
+				let uids = [];
 
-					let uids = [];
+				if (Object.keys(event.mentions).length > 0)
+					uids = Object.keys(event.mentions);
+				else if (event.messageReply)
+					uids.push(event.messageReply.senderID);
+				else
+					uids = args.filter(arg => !isNaN(arg));
 
-					if (Object.keys(event.mentions).length > 0)
+				const added = [];
 
-						uids = Object.keys(event.mentions);
-
-					else if (event.messageReply)
-
-						uids.push(event.messageReply.senderID);
-
-					else
-
-						uids = args.filter(arg => !isNaN(arg));
-
-					const notAdminIds = [];
-
-					const adminIds = [];
-
-					for (const uid of uids) {
-
-						if (config.whiteListMode.whiteListIds.includes(uid))
-
-							adminIds.push(uid);
-
-						else
-
-							notAdminIds.push(uid);
-
+				for (const uid of uids) {
+					if (!config.whiteListMode.whiteListIds.includes(uid)) {
+						config.whiteListMode.whiteListIds.push(uid);
+						added.push(uid);
 					}
-
-
-					config.whiteListMode.whiteListIds.push(...notAdminIds);
-
-					const getNames = await Promise.all(uids.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
-
-					writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
-
-					return message.reply(
-
-						(notAdminIds.length > 0 ? getLang("added", notAdminIds.length, getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")) : "")
-
-						+ (adminIds.length > 0 ? getLang("alreadyAdmin", adminIds.length, adminIds.map(uid => `• ${uid}`).join("\n")) : "")
-
-					);
-
 				}
 
-				else
+				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
-					return message.reply(getLang("missingIdAdd"));
+				const names = await Promise.all(
+					added.map(uid => usersData.getName(uid).then(name => `• ${name} (${uid})`))
+				);
 
+				return message.reply(getLang("added", names.join("\n")));
 			}
 
+			// ================= REMOVE =================
 			case "remove":
-
 			case "-r": {
+				if (!args[1]) return message.reply(getLang("missingIdRemove"));
 
-				if (args[1]) {
+				let uids = [];
 
-					let uids = [];
+				if (Object.keys(event.mentions).length > 0)
+					uids = Object.keys(event.mentions);
+				else
+					uids = args.filter(arg => !isNaN(arg));
 
-					if (Object.keys(event.mentions).length > 0)
+				const removed = [];
 
-						uids = Object.keys(event.mentions)[0];
-
-					else
-
-						uids = args.filter(arg => !isNaN(arg));
-
-					const notAdminIds = [];
-
-					const adminIds = [];
-
-					for (const uid of uids) {
-
-						if (config.whiteListMode.whiteListIds.includes(uid))
-
-							adminIds.push(uid);
-
-						else
-
-							notAdminIds.push(uid);
-
+				for (const uid of uids) {
+					if (config.whiteListMode.whiteListIds.includes(uid)) {
+						config.whiteListMode.whiteListIds.splice(
+							config.whiteListMode.whiteListIds.indexOf(uid),
+							1
+						);
+						removed.push(uid);
 					}
-
-					for (const uid of adminIds)
-
-						config.whiteListMode.whiteListIds.splice(config.whiteListMode.whiteListIds.indexOf(uid), 1);
-
-					const getNames = await Promise.all(adminIds.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
-
-					writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
-
-					return message.reply(
-
-						(adminIds.length > 0 ? getLang("removed", adminIds.length, getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")) : "")
-
-						+ (notAdminIds.length > 0 ? getLang("notAdmin", notAdminIds.length, notAdminIds.map(uid => `• ${uid}`).join("\n")) : "")
-
-					);
-
 				}
 
-				else
+				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
-					return message.reply(getLang("missingIdRemove"));
+				const names = await Promise.all(
+					removed.map(uid => usersData.getName(uid).then(name => `• ${name} (${uid})`))
+				);
 
+				return message.reply(getLang("removed", names.join("\n")));
 			}
 
+			// ================= LIST =================
 			case "list":
-
 			case "-l": {
+				const names = await Promise.all(
+					config.whiteListMode.whiteListIds.map(uid =>
+						usersData.getName(uid).then(name => `• ${name} (${uid})`)
+					)
+				);
 
-				const getNames = await Promise.all(config.whiteListMode.whiteListIds.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
-
-				return message.reply(getLang("listAdmin", getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")));
-
+				return message.reply(getLang("listAdmin", names.join("\n")));
 			}
 
-        case "on": {              
+			// ================= ON =================
+			case "on": {
+				config.whiteListMode.enable = true;
+				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
-   config.whiteListMode.enable = true;
+				const time = moment().tz("Asia/Dhaka").format("hh:mm A");
+				const date = moment().tz("Asia/Dhaka").format("DD MMMM YYYY");
 
-                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+				const msg = `
+👑  𝆠፝𝐒𝐈𝐘𝐀𝐌-𝐇𝐀𝐒𝐀𝐍  👑
 
-                return message.reply(getLang("enable"))
+𝆠፝𝐖𝐇𝐈𝐓𝐄 𝐋𝐈𝐒𝐓 𝐌𝐎𝐃𝐄 𝐄𝐍𝐀𝐁𝐋𝐄𝐃
 
-            }
+🔐  𝆠፝𝐀𝐂𝐂𝐄𝐒𝐒 :
+   𝆠፝🐸এখন শুধু আমার বস সিয়াম🪬
+   𝆠፝বট ব্যবহার করতে পারবে 👑
 
-            case "off": {
+📅  𝆠፝𝐃𝐚𝐭𝐞 : ${date}
+⏰  𝆠፝𝐓𝐢𝐦𝐞 : ${time}
 
-   config.whiteListMode.enable = false;
+👑  𝆠፝𝐍𝐈𝐉𝐇𝐔𝐌 𝐂𝐇𝐀𝐓 𝐁𝐎𝐓  👑
+`;
 
-                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+				return message.reply(msg);
+			}
 
-                return message.reply(getLang("disable"))
+			// ================= OFF =================
+			case "off": {
+				config.whiteListMode.enable = false;
+				writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
 
-            }
+				const time = moment().tz("Asia/Dhaka").format("hh:mm A");
+				const date = moment().tz("Asia/Dhaka").format("DD MMMM YYYY");
 
-            default:
+				const msg = `
+👑  𝆠፝𝐒𝐈𝐘𝐀𝐌-𝐇𝐀𝐒𝐀𝐍  👑
 
-                return message.SyntaxError();
+𝆠፝𝐖𝐇𝐈𝐓𝐄 𝐋𝐈𝐒𝐓 𝐌𝐎𝐃𝐄 𝐃𝐈𝐒𝐀𝐁𝐋𝐄𝐃
 
-        }
+🌐  𝆠፝𝐀𝐂𝐂𝐄𝐒𝐒 :
+   𝆠፝এখন সবাই বট ব্যবহার🪬
+   𝆠፝করতে পারবে 🎉
 
-    }
+📅  𝆠፝𝐃𝐚𝐭𝐞 : ${date}
+⏰  𝆠፝𝐓𝐢𝐦𝐞 : ${time}
 
+👑  𝆠፝𝐍𝐈𝐉𝐇𝐔𝐌 𝐂𝐇𝐀𝐓 𝐁𝐎𝐓  👑
+`;
+
+				return message.reply(msg);
+			}
+
+			default:
+				return message.SyntaxError();
+		}
+	}
 };

@@ -6,10 +6,10 @@ const path = require("path");
 module.exports = {
   config: {
     name: "owner3",
-    version: "10.0",
-    author: "Siyam Ultra Premium",
-    countDown: 0,
-    role: 0,
+    version: "11.0",
+    author: "Siyam Ultra Premium (Optimized)",
+    countDown: 10,
+    role: 2, // 🔒 heavy cmd protection
     shortDescription: "Ultra Premium Owner Card",
     category: "utility"
   },
@@ -17,48 +17,52 @@ module.exports = {
   onStart: async function ({ message, api }) {
     try {
 
-      // 🔁 CARD CYCLE SYSTEM
+      // 🔁 SAFE CARD CYCLE (no global conflict)
       if (!global.ownerCardIndex) global.ownerCardIndex = 0;
       const cardIndex = global.ownerCardIndex;
+      global.ownerCardIndex = (global.ownerCardIndex + 1) % 3;
 
-      global.ownerCardIndex++;
-      if (global.ownerCardIndex >= 3) global.ownerCardIndex = 0;
-
-      // ⏳ LOADING MESSAGE
-      const loadingMsg = await message.reply("🔍 Searching Admin Info...");
-      await new Promise(r => setTimeout(r, 5000));
+      // ⚡ FAST LOADING (short)
+      const loadingMsg = await message.reply("⚡ Generating Premium Card...");
+      await new Promise(r => setTimeout(r, 1500));
       try { await api.unsendMessage(loadingMsg.messageID); } catch {}
 
-      // ======================
-      // 🎨 START CARD
-      // ======================
-
+      // ⏱️ uptime
       const up = process.uptime();
       const h = Math.floor(up / 3600);
       const m = Math.floor((up % 3600) / 60);
 
-      const avatar = await loadImage("https://i.imgur.com/lx061ey.jpeg");
+      // 🖼️ avatar safe load
+      let avatar;
+      try {
+        avatar = await loadImage("https://i.imgur.com/lx061ey.jpeg");
+      } catch {
+        avatar = await loadImage("https://i.imgur.com/2WZtOD6.png");
+      }
 
-      const width = 1000;
-      const height = 600;
+      // 📏 optimized size
+      const width = 800;
+      const height = 450;
 
       const encoder = new GIFEncoder(width, height);
-      const filePath = path.join(__dirname, `owner3_${cardIndex}.gif`);
+
+      // ⚡ unique file (no conflict)
+      const filePath = path.join(__dirname, `owner3_${Date.now()}.gif`);
 
       encoder.start();
       encoder.setRepeat(0);
-      encoder.setDelay(100);
+      encoder.setDelay(110);
       encoder.setQuality(10);
 
       const canvas = createCanvas(width, height);
       const ctx = canvas.getContext("2d");
 
-      // ⭐ STARS
-      const stars = Array.from({ length: 120 }, () => ({
+      // ⭐ optimized stars
+      const stars = Array.from({ length: 70 }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 2,
-        speed: Math.random() * 0.5 + 0.2
+        r: Math.random() * 1.5,
+        speed: Math.random() * 0.4 + 0.2
       }));
 
       function drawStars(frame) {
@@ -73,37 +77,39 @@ module.exports = {
 
       function nebula(frame) {
         const g = ctx.createRadialGradient(
-          width/2 + Math.sin(frame*0.05)*200,
-          height/2,
-          100,
-          width/2,
-          height/2,
-          600
+          width / 2 + Math.sin(frame * 0.05) * 120,
+          height / 2,
+          50,
+          width / 2,
+          height / 2,
+          400
         );
 
-        if (cardIndex === 0) g.addColorStop(0, "rgba(255,0,102,0.4)");
-        if (cardIndex === 1) g.addColorStop(0, "rgba(0,255,255,0.4)");
-        if (cardIndex === 2) g.addColorStop(0, "rgba(255,215,0,0.4)");
+        const colors = [
+          "rgba(255,0,102,0.4)",
+          "rgba(0,255,255,0.4)",
+          "rgba(255,215,0,0.4)"
+        ];
 
+        g.addColorStop(0, colors[cardIndex]);
         g.addColorStop(1, "rgba(0,0,0,0.9)");
 
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, width, height);
       }
 
-      // 💎 PREMIUM TEXT
       function premiumText(t, x, y, size, colors, glow = true) {
-        const grad = ctx.createLinearGradient(x, y - size, x + 400, y);
+        const grad = ctx.createLinearGradient(x, y - size, x + 300, y);
 
         colors.forEach((c, i) => {
           grad.addColorStop(i / (colors.length - 1), c);
         });
 
-        ctx.font = `bold ${size}px Sans`;
+        ctx.font = `bold ${size}px Arial`;
         ctx.fillStyle = grad;
 
         if (glow) {
-          ctx.shadowBlur = 20;
+          ctx.shadowBlur = 15;
           ctx.shadowColor = colors[0];
         }
 
@@ -114,9 +120,11 @@ module.exports = {
         ctx.fillText(t, x, y);
 
         ctx.shadowBlur = 0;
+        ctx.shadowColor = "transparent";
       }
 
-      for (let i = 0; i < 60; i++) {
+      // 🎬 optimized frames (60 → 30)
+      for (let i = 0; i < 30; i++) {
 
         ctx.fillStyle = "#020617";
         ctx.fillRect(0, 0, width, height);
@@ -125,36 +133,19 @@ module.exports = {
         nebula(i);
 
         // FRAME
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = ["#ff4d6d","#00ffff","#ffd700"][cardIndex];
-        ctx.strokeRect(20, 20, 960, 560);
-
-        // HEART
-        ctx.beginPath();
-        ctx.moveTo(500, 300);
-        ctx.bezierCurveTo(500, 200, 350, 200, 350, 300);
-        ctx.bezierCurveTo(350, 420, 500, 500, 500, 550);
-        ctx.bezierCurveTo(500, 500, 650, 420, 650, 300);
-        ctx.bezierCurveTo(650, 200, 500, 200, 500, 300);
-        ctx.closePath();
-        ctx.strokeStyle = "rgba(255,0,100,0.4)";
-        ctx.stroke();
+        const borderColors = ["#ff4d6d","#00ffff","#ffd700"];
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = borderColors[cardIndex];
+        ctx.strokeRect(15, 15, width - 30, height - 30);
 
         // WATERMARK
-        ctx.globalAlpha = 0.06;
-        premiumText(
-          "UDAY HASAN SIYAM",
-          260,
-          100,
-          70,
-          ["#ffffff","#999999"],
-          false
-        );
+        ctx.globalAlpha = 0.05;
+        premiumText("UDAY HASAN SIYAM", 200, 80, 50, ["#ffffff","#888"], false);
         ctx.globalAlpha = 1;
 
         // PROFILE ROTATION
-        const cx = 200;
-        const cy = 300;
+        const cx = 140;
+        const cy = height / 2;
         const angle = (i % 20) * (Math.PI * 2 / 20);
 
         ctx.save();
@@ -162,47 +153,44 @@ module.exports = {
         ctx.rotate(angle);
 
         ctx.beginPath();
-        ctx.arc(0, 0, 90, 0, Math.PI * 2);
+        ctx.arc(0, 0, 65, 0, Math.PI * 2);
         ctx.clip();
-        ctx.drawImage(avatar, -90, -90, 180, 180);
+        ctx.drawImage(avatar, -65, -65, 130, 130);
         ctx.restore();
 
         // RING LIGHT
-        for (let k = 0; k < 8; k++) {
-          const a = angle + (k * Math.PI / 4);
-          const x = cx + Math.cos(a) * 115;
-          const y = cy + Math.sin(a) * 115;
+        for (let k = 0; k < 6; k++) {
+          const a = angle + (k * Math.PI / 3);
+          const x = cx + Math.cos(a) * 90;
+          const y = cy + Math.sin(a) * 90;
 
           ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = ["#ff4d6d","#00ffff","#ffd700","#00ff99","#ff00ff","#ffffff","#ff8800","#00aaff"][k];
-          ctx.shadowBlur = 15;
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = ["#ff4d6d","#00ffff","#ffd700","#00ff99","#ff00ff","#ffffff"][k];
+          ctx.shadowBlur = 10;
           ctx.shadowColor = ctx.fillStyle;
           ctx.fill();
           ctx.shadowBlur = 0;
+          ctx.shadowColor = "transparent";
         }
 
         // TEXT
-        premiumText(
-          "𝐁𝐎𝐓 𝐎𝐖𝐍𝐄𝐑 𝐒𝐈𝐘𝐀𝐌",
-          300,
-          150,
-          36,
-          [
-            ["#ffd700","#fff8dc","#ffd700"],
-            ["#00ffff","#ffffff","#00ffff"],
-            ["#ff4d6d","#ff99aa","#ff4d6d"]
-          ][cardIndex]
-        );
+        const titleColors = [
+          ["#ffd700","#fff8dc","#ffd700"],
+          ["#00ffff","#ffffff","#00ffff"],
+          ["#ff4d6d","#ff99aa","#ff4d6d"]
+        ];
 
-        premiumText("Name : Uday Hasan Siyam", 350, 220, 26, ["#ffffff","#cbd5f5"]);
-        premiumText("Home : Kishoreganj", 350, 260, 26, ["#ffffff","#cbd5f5"]);
-        premiumText("Study : Class 10", 350, 300, 26, ["#ffffff","#cbd5f5"]);
-        premiumText("Status : Single 😎", 350, 340, 26, ["#ffffff","#cbd5f5"]);
+        premiumText("𝐁𝐎𝐓 𝐎𝐖𝐍𝐄𝐑 𝐒𝐈𝐘𝐀𝐌", 240, 110, 26, titleColors[cardIndex]);
 
-        premiumText(`Running : ${h}h ${m}m`, 350, 400, 24, ["#38bdf8","#0ea5e9"]);
+        premiumText("Name : Uday Hasan Siyam", 250, 160, 16, ["#ffffff","#cbd5f5"]);
+        premiumText("Home : Kishoreganj", 250, 190, 16, ["#ffffff","#cbd5f5"]);
+        premiumText("Study : Class 10", 250, 220, 16, ["#ffffff","#cbd5f5"]);
+        premiumText("Status : Single 😎", 250, 250, 16, ["#ffffff","#cbd5f5"]);
 
-        premiumText("NIJHUM BOT ⚡", 350, 460, 30, ["#22c55e","#4ade80","#22c55e"]);
+        premiumText(`Running : ${h}h ${m}m`, 250, 290, 16, ["#38bdf8","#0ea5e9"]);
+
+        premiumText("NIJHUM BOT ⚡", 250, 330, 20, ["#22c55e","#4ade80","#22c55e"]);
 
         encoder.addFrame(ctx);
       }
@@ -210,10 +198,14 @@ module.exports = {
       encoder.finish();
       fs.writeFileSync(filePath, encoder.out.getData());
 
-      return message.reply({
-        body: `🔥 Card ${cardIndex + 1}/3 Ready`,
+      // 📤 send
+      await message.reply({
+        body: `🔥 Premium Card ${cardIndex + 1}/3`,
         attachment: fs.createReadStream(filePath)
       });
+
+      // 🧹 delete after send
+      fs.unlinkSync(filePath);
 
     } catch (e) {
       return message.reply("❌ Error: " + e.message);
